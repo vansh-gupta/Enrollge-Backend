@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-
 const DB = process.env.DATABASE;
 
- mongoose.connect("mongodb://localhost:27017/enrollge" ,{
+ mongoose.connect(DB ,{
      useCreateIndex: true,
      useNewUrlParser: true,
-     useUnifiedTopology: true
+     useUnifiedTopology: true,
+     useFindAndModify:false
  }).then(() =>{
      console.log("Connection Succesfull");
  }).catch((e) =>{
