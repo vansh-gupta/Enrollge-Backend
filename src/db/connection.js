@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
- mongoose.connect("mongodb+srv://VidMax:EW03F6qjEzb4yVUQ@cluster0.h279k.mongodb.net/VidMaxretryWrites=true&w=majority",{
+const DB = process.env.DATABASE;
+
+ mongoose.connect("mongodb://localhost:27017/enrollge" ,{
      useCreateIndex: true,
      useNewUrlParser: true,
      useUnifiedTopology: true

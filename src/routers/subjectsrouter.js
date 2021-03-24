@@ -23,7 +23,7 @@ router.get("/subjects", async (req, res) => {
     }
 })
 
-// Here, We Handle Patch Request
+// Here, We Handle Patch Request For Update Subject Details
 router.patch("/subjects/:id", async (req, res) => {
     try {
         const _id = req.params.id
@@ -31,6 +31,29 @@ router.patch("/subjects/:id", async (req, res) => {
         res.send(UpdateSubject);
     } catch (e) {
         res.status(500).send(e);
+    }
+})
+// Here, We Handle Patch Request For Update Chapter And Topics Details
+// router.patch("/subjects/chapters/:id", async (req, res) => {
+//     try {
+//         const _id = req.params.id
+//         const UpdateSubject = await Subjects.updateOne({ 'Chapters.Chapter_Name':'Cdwhapter_' }, {$set: req.body}, { new: true })
+//         res.send(UpdateSubject);
+//     } catch (e) {
+//         res.status(500).send(e);
+//     }
+// })
+
+
+// Here We Will Handle the Put Request For Adding Chapter And Topics in Subjects
+router.put("/subjects/chapters/:id", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const AddChapterTopics = await Subjects.updateOne({_id:_id},{$push: req.body}, {new:true})
+        res.send(AddChapterTopics);
+    } catch (e) {
+        res.status(500).send(e);
+        console.log(e);
     }
 })
 
