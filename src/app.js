@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
-dotenv.config({ path: `${__dirname}/config.env`});
+dotenv.config({ path: `${__dirname}/config.env` });
+const cors = require("cors");
 const express = require("express");
 const app = express();
 require("../src/db/connection");
@@ -8,6 +9,8 @@ const subjectsrouter = require("./routers/subjectsrouter");
 const extracoursesrouter = require("./routers/extracoursesrouter");
 const adminrouter = require("./routers/adminrouter");
 
+
+app.use(cors());
 
 
 const PORT = process.env.PORT

@@ -48,7 +48,7 @@ router.post("/admin/login", async (req, res) => {
             res.status(422).json({ error: "Invalid Credentails" })
         } else {
             const token = await AdminExist.generateAuthToken();
-            res.cookie("jwtadmin", token,{
+            res.cookie("jwtadmin", token, {
                 expires: new Date(Date.now() + 86400000)
             });
             res.status(201).json({ message: "User Login Successfully" });
@@ -56,25 +56,6 @@ router.post("/admin/login", async (req, res) => {
 
     } catch (e) {
         res.status(422).send(e);
-    }
-})
-
-// First Handle Get Request to get Admin Info
-router.get("/admin/:email/:password", async (req, res) => {
-    try {
-        const email = req.params.email
-        const password = req.params.password
-
-        const AdminEmail = await Admin.findOne({ email_address: email });
-
-        if (password === AdminEmail.password) {
-            res.status(200).send("Login Successfull")
-        } else {
-            res.send("Invalid Details");
-        }
-
-    } catch (e) {
-        res.send(e);
     }
 })
 

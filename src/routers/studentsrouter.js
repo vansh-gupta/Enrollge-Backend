@@ -11,25 +11,25 @@ router.get("/", async (req, res) => {
 // Here We Will Handle Post Request (To Create Or To Register) Students in th App
 router.post("/students/register", async (req, res) => {
     try {
-        const { Full_Name, Course, Branch , Semester, Gmail_Id, Mobile_No, College_Name, Password, CPassword } = req.body;
+        const { Full_Name, Course, Branch, Semester, Gmail_Id, Mobile_No, College_Name, Password, CPassword } = req.body;
 
-        if(!Full_Name || !Course || !Branch || !Semester || !Gmail_Id || !Mobile_No || !College_Name || !Password || !CPassword){
-            return(res.status(422).json({error: "Please fill the Details Properly"}))
+        if (!Full_Name || !Course || !Branch || !Semester || !Gmail_Id || !Mobile_No || !College_Name || !Password || !CPassword) {
+            return (res.status(422).json({ error: "Please fill the Details Properly" }))
         }
 
-        const StudentExist = await Students.findOne({Gmail_Id:Gmail_Id})
+        const StudentExist = await Students.findOne({ Gmail_Id: Gmail_Id })
 
-        if(StudentExist){
-            return(res.status(422).json({error:"Email Already Exist"}));
+        if (StudentExist) {
+            return (res.status(422).json({ error: "Email Already Exist" }));
         }
-        if(Password != CPassword){
-            return(res.status(422).json({error:"Please Enter the Same Password"}))
+        if (Password != CPassword) {
+            return (res.status(422).json({ error: "Please Enter the Same Password" }))
         }
 
-        const AddStudent = new Students({ Full_Name, Course, Branch , Semester, Gmail_Id, Mobile_No, College_Name, Password, CPassword })
+        const AddStudent = new Students({ Full_Name, Course, Branch, Semester, Gmail_Id, Mobile_No, College_Name, Password, CPassword })
 
         // Here Use Middle Ware of Bcrypt js 
-        
+
         await AddStudent.save();
 
     } catch (e) {
@@ -38,27 +38,27 @@ router.post("/students/register", async (req, res) => {
 });
 
 // Now We Handle Post Request For Login Students
-router.post("/students/login", async(req, res)=>{
-    try{
-        const {Gmail_Id, Password} = req.body;
+router.post("/students/login", async (req, res) => {
+    try {
+        const { Gmail_Id, Password } = req.body;
 
-        if(!Gmail_Id || !Password){
-            return(res.status(422).json({error:"Please fill the Details Properly"}));
+        if (!Gmail_Id || !Password) {
+            return (res.status(422).json({ error: "Please fill the Details Properly" }));
         }
-        
-        const StudentLogin = await Students.findOne({Gmail_Id:Gmail_Id});
+
+        const StudentLogin = await Students.findOne({ Gmail_Id: Gmail_Id });
         const isMatch = await bcrypt.compare(Password, StudentLogin.Password);
 
-        if(!isMatch){
-            return(res.status(422).json({error:"Invalid Credentials"}))
-        }else{
+        if (!isMatch) {
+            return (res.status(422).json({ error: "Invalid Credentials" }))
+        } else {
             const token = await StudentLogin.generateAuthToken();
             console.log(token);
             res.cookie("jwtstudent", token);
-            return(res.status(200).json({message:"User Login Succesfully"}))
+            return (res.status(200).json({ message: "User Login Succesfully" }))
         }
 
-    }catch(e){
+    } catch (e) {
         res.status(401).send(e);
     }
 })

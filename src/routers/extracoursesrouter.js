@@ -13,6 +13,17 @@ router.post("/extracourses", async (req, res) => {
     }
 })
 
+//Here We Handle Add Topics in ExtraCourses
+router.put("/extracourses/:id", async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const AddExtraCoursesTopic = await ExtraCourses.updateOne({ _id: _id }, { $push: { 'ExtraCourses_Topics': req.body } }, { new: true })
+        res.send(AddExtraCoursesTopic);
+    } catch (e) {
+        res.status(401).send(e);
+    }
+})
+
 // Here We Will Handle Get Request to Get ExtraCoureses with Topics
 router.get("/extracourses", async (req, res) => {
     try {

@@ -5,11 +5,15 @@ const SubjectsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    Subject_Order: {
+        type: String,
+        require: true
+    },
     Subject_imgurl: {
         type: String,
         require: true
     },
-    Chapters:[{
+    Chapters: [{
         Chapter_Name: { type: String, require: true },
         Chapter_Order: { type: Number, require: true },
         Subject_Name: { type: String, require: true },
