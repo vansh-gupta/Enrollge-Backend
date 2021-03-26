@@ -25,8 +25,10 @@ router.post("/admin/register", async (req, res) => {
         const AddAdmin = new Admin({ email_address, password, cpassword });
         // Here We Use Pre Function in AdminSchema to hash the Password
         await AddAdmin.save();
+
+        res.send("Register Successfull")
     } catch (e) {
-        res.send(e)
+        res.status(402).send(e)
     }
 })
 
@@ -43,15 +45,16 @@ router.post("/admin/login", async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, AdminExist.password);
 
+        const token = await AdminExist.generateAuthToken();
+
+        res.cookie("jwtadmin", token, {
+            expires: new Date(Date.now() + 86400000)
+        });
 
         if (!isMatch) {
-            res.status(422).json({ error: "Invalid Credentails" })
+            res.send(false);
         } else {
-            const token = await AdminExist.generateAuthToken();
-            res.cookie("jwtadmin", token, {
-                expires: new Date(Date.now() + 86400000)
-            });
-            res.status(201).json({ message: "User Login Successfully" });
+            res.status(201).send(true);
         }
 
     } catch (e) {

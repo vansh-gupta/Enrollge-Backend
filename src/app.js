@@ -8,9 +8,11 @@ const studentsrouter = require("./routers/studentsrouter");
 const subjectsrouter = require("./routers/subjectsrouter");
 const extracoursesrouter = require("./routers/extracoursesrouter");
 const adminrouter = require("./routers/adminrouter");
+const cookieparser = require("cookie-parser");
 
 
 app.use(cors());
+app.use(cookieparser());
 
 
 const PORT = process.env.PORT

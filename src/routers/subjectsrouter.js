@@ -6,10 +6,10 @@ const Subjects = require("../models/subjects");
 router.post("/subjects", async (req, res) => {
     try {
         const AddSubject = new Subjects(req.body)
-        const insertSubject = await AddSubject.save();
-        res.send(insertSubject);
+        await AddSubject.save();
+        res.send("Successfully Added");
     } catch (e) {
-        res.status(400).send(e);
+        res.status(402).send(e);
     }
 })
 
@@ -35,15 +35,26 @@ router.patch("/subjects/:id", async (req, res) => {
 })
 
 
-// Here We Will Handle the Put Request For Adding Chapter And Topics in Subjects
+// Here We Will Handle the Put Request For Adding Chapter in Subjects
 router.put("/subjects/chapters/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const AddChapterTopics = await Subjects.updateOne({ _id: _id }, { $push: req.body }, { new: true })
-        res.send(AddChapterTopics);
+        const AddChapter = await Subjects.updateOne({ _id: _id }, { $push: { 'Chapters' : req.body} }, { new: true })
+        res.send(AddChapter);
     } catch (e) {
         res.status(500).send(e);
-        console.log(e);
+    }
+})
+// Here We Will Handle the Put Request For Adding Topics in Subjects of Chapter
+router.put("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        // Here First We Have to Find the Object by id And Then Find The Array Of Object With that Id And Push it Using Push Method
+        const AddTopics = await Subjects.update({ _id:_ids , "Chapters._id": _idc }, { $push: {"Chapters.$.Topics": req.body} }, { new: true })
+        res.send(AddTopics);
+    } catch (e) {
+        res.status(402).send(e);
     }
 })
 
