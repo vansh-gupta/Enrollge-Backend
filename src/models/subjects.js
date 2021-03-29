@@ -34,6 +34,7 @@ const SubjectsSchema = new mongoose.Schema({
             Topic_Name: { type: String, require: true },
             Topic_Order: { type: String, require: true, unique:true },
             Topic_Description: { type: String, require: true },
+            Chapter_Order: { type: String, require: true},
             Topic_Url: { type: String, require: true },
             Topic_ImgUrl: { type: String, require: true }
         }]

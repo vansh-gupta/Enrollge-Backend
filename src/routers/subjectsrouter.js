@@ -7,9 +7,9 @@ router.post("/subjects", async (req, res) => {
     try {
         const AddSubject = new Subjects(req.body)
         await AddSubject.save();
-        res.send("Successfully Added");
+        res.send(true);
     } catch (e) {
-        res.status(402).send(e);
+        res.send(false);
     }
 })
 
@@ -27,10 +27,34 @@ router.get("/subjects", async (req, res) => {
 router.patch("/subjects/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const UpdateSubject = await Subjects.findByIdAndUpdate({ _id: _id }, req.body, { new: true })
-        res.send(UpdateSubject);
+        await Subjects.findByIdAndUpdate({ _id: _id }, req.body, { new: true })
+        res.send(true);
     } catch (e) {
-        res.status(500).send(e);
+        res.send(false);
+    }
+})
+
+
+// Here, We Handle Patch Request For Update Chapter of Subject Details
+router.patch("/subjects/chapters/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+         await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: req.body }, { new: true })
+        res.send(true);
+    } catch (e) {
+        res.send(false);
+    }
+})
+// Here, We Handle Patch Request For Update Topics of Chapter of Subject Details
+router.patch("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: req.body }, { new: true })
+        res.send(true);
+    } catch (e) {
+        res.send(false);
     }
 })
 
@@ -39,10 +63,10 @@ router.patch("/subjects/:id", async (req, res) => {
 router.put("/subjects/chapters/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const AddChapter = await Subjects.updateOne({ _id: _id }, { $push: { 'Chapters' : req.body} }, { new: true })
-        res.send(AddChapter);
+        await Subjects.updateOne({ _id: _id }, { $push: { 'Chapters': req.body } }, { new: true })
+        res.send(true);
     } catch (e) {
-        res.status(500).send(e);
+        res.send(false);
     }
 })
 // Here We Will Handle the Put Request For Adding Topics in Subjects of Chapter
@@ -51,7 +75,7 @@ router.put("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
         const _ids = req.params.ids
         const _idc = req.params.idc
         // Here First We Have to Find the Object by id And Then Find The Array Of Object With that Id And Push it Using Push Method
-        const AddTopics = await Subjects.update({ _id:_ids , "Chapters._id": _idc }, { $push: {"Chapters.$.Topics": req.body} }, { new: true })
+        const AddTopics = await Subjects.update({ _id: _ids, "Chapters._id": _idc }, { $push: { "Chapters.$.Topics": req.body } }, { new: true })
         res.send(AddTopics);
     } catch (e) {
         res.status(402).send(e);
@@ -59,25 +83,73 @@ router.put("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
 })
 
 // Now, We Handle Delete Request
-router.delete("/subjects/:id", async (req, res) => {
+router.delete("/subject/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const DeleteSubject = await Subjects.findByIdAndDelete({ _id: _id })
-        res.send(DeleteSubject);
+        await Subjects.findByIdAndDelete({ _id: _id })
+        res.send(true);
     } catch (e) {
         res.status(500).send(e);
     }
 })
 
-// Now We Handle Get Request For Individuals Subjects
-router.get("/subjects/:subjectName", async (req, res) => {
+// Now We Handle Get Request For Individuals Subjects And Chapters
+router.get("/subject/:id", async (req, res) => {
     try {
-        const subjectName = req.params.subjectName
-        const ShowSubject = await Subjects.find({ Subject_Name: subjectName })
+        const _id = req.params.id
+        const ShowSubject = await Subjects.find({ _id: _id })
         res.send(ShowSubject);
     } catch (e) {
-        res.send(400).send(e);
+        res.send(e);
     }
 })
+// Now We Handle Get Request For Individuals Subjects And Chapters
+router.get("/subject/chapter/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        const ShowChapter = await Subjects.find({ _id: _ids, "Chapters._id": _idc })
+        res.send(ShowChapter);
+    } catch (e) {
+        res.send(e);
+    }
+})
+
+
+// Here We Handle Get Request For Search Subject By Name
+router.get("/subjects/:subname", async (req, res) => {
+    try {
+        const subname = req.params.subname
+        const ShowSubjects = await Subjects.findOne({ Subject_Name: subname })
+        res.send(ShowSubjects)
+    } catch (e) {
+        res.send("nhi huva")
+    }
+})
+
+// Here We Handle Delete Request for Deleting Chapter
+router.delete("/subjects/chapters/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        await Subjects.update({ _id: _ids }, { $pull: { "Chapters": { "_id": _idc } } }, { new: true })
+        res.send(true);
+    } catch (e) {
+        res.send(false)
+    }
+})
+// Here We Handle Delete Request for Deleting Topic
+router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        const _idt = req.params.idt
+        const DeleteTopic = await Subjects.update({ "_id": _ids, "Chapters._id": _idc }, { $pull: { "Chapters.$.Topics": { "_id": _idt } } }, { new: true });
+        res.send(true)
+    } catch (e) {
+        res.send(false);
+    }
+})
+
 
 module.exports = router
