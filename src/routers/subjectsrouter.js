@@ -40,18 +40,20 @@ router.patch("/subjects/chapters/:ids/:idc", async (req, res) => {
     try {
         const _ids = req.params.ids
         const _idc = req.params.idc
-         await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: req.body }, { new: true })
+        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: req.body }, { new: true })
         res.send(true);
     } catch (e) {
         res.send(false);
     }
 })
 // Here, We Handle Patch Request For Update Topics of Chapter of Subject Details
-router.patch("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
+router.patch("/subjects/chapters/topics/:ids/:idc/:topicindex", async (req, res) => {
     try {
         const _ids = req.params.ids
         const _idc = req.params.idc
-        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: req.body }, { new: true })
+        const topicindex = req.params.topicindex
+        const updateTopic = `Chapters.$.Topics.${topicindex}` // !Important How To Pass const values in (query,update, options) of mongodb
+        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, { $set: { [`${updateTopic}`]: req.body } }, { new: true }) // Use const or external object or variable in mongo using array [] and then backlits[`${external object or value}`] to enter external object or value
         res.send(true);
     } catch (e) {
         res.send(false);
@@ -144,7 +146,7 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
         const _ids = req.params.ids
         const _idc = req.params.idc
         const _idt = req.params.idt
-        const DeleteTopic = await Subjects.update({ "_id": _ids, "Chapters._id": _idc }, { $pull: { "Chapters.$.Topics": { "_id": _idt } } }, { new: true });
+        await Subjects.update({ "_id": _ids, "Chapters._id": _idc }, { $pull: { "Chapters.$.Topics": { "_id": _idt } } }, { new: true });
         res.send(true)
     } catch (e) {
         res.send(false);

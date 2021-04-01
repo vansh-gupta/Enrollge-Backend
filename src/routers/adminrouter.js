@@ -16,7 +16,7 @@ router.post("/admin/register", async (req, res) => {
         const AdminExist = await Admin.findOne({ email_address: email_address })
 
         if (AdminExist) {
-            return (res.status(422).json({ error: "Email Id Already Exist" }))
+            return (res.send("AdminExist"));
         }
         if (password != cpassword) {
             return (res.status(422).json({ error: "Please Enter Same Password" }))
@@ -26,9 +26,9 @@ router.post("/admin/register", async (req, res) => {
         // Here We Use Pre Function in AdminSchema to hash the Password
         await AddAdmin.save();
 
-        res.send("Register Successfull")
+        res.send(true)
     } catch (e) {
-        res.status(402).send(e)
+        res.send(false)
     }
 })
 
@@ -38,28 +38,48 @@ router.post("/admin/login", async (req, res) => {
         const { email_address, password } = req.body;
 
         if (!email_address || !password) {
-            return (res.status(422).json({ error: "Please fill the Details Properly" }))
+            return (res.status(402).json({ error: "Please fill the Details Properly" }))
         }
 
         const AdminExist = await Admin.findOne({ email_address: email_address })
+
+        if (!AdminExist) {
+            res.send(false)
+        }
 
         const isMatch = await bcrypt.compare(password, AdminExist.password);
 
         const token = await AdminExist.generateAuthToken();
 
-        res.cookie("jwtadmin", token, {
-            expires: new Date(Date.now() + 86400000)
-        });
-
         if (!isMatch) {
-            res.send(false);
+            res.json({ "Login": false })
         } else {
-            res.status(201).send(true);
+            res.cookie("jwtadmin", token, {
+                expires: new Date(Date.now() + 86400000),
+                httpOnly: true,
+                secure: false
+            });
+            res.status(201).json({ "Login": true, "Token": token });
         }
 
     } catch (e) {
         res.status(422).send(e);
     }
+})
+
+router.post('/admin/login/token')
+
+//  Here We Handle the Api to get last element of array
+router.post('/admin/token/:email', async (req, res) => {
+    try {
+        const email = req.params.email
+        const token = await Admin.find({ email_address: email }, { 'tokens': { $slice: -1 } })
+        res.send(token)
+
+    } catch (e) {
+        res.send(e)
+    }
+
 })
 
 module.exports = router;

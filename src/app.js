@@ -6,7 +6,7 @@ const app = express();
 require("../src/db/connection");
 const studentsrouter = require("./routers/studentsrouter");
 const subjectsrouter = require("./routers/subjectsrouter");
-const extracoursesrouter = require("./routers/extracoursesrouter");
+const coursesrouter = require("./routers/coursesrouter");
 const adminrouter = require("./routers/adminrouter");
 const cookieparser = require("cookie-parser");
 
@@ -20,7 +20,7 @@ const PORT = process.env.PORT
 app.use(express.json());
 app.use(studentsrouter);
 app.use(subjectsrouter);
-app.use(extracoursesrouter);
+app.use(coursesrouter);
 app.use(adminrouter);
 
 app.listen(PORT, () => {

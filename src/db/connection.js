@@ -7,7 +7,7 @@ mongoose.connect(DB, {
     useUnifiedTopology: true,
     useFindAndModify: false
 }).then(() => {
-    console.log("Connection Succesfull");
+    console.log("Successfully Connect With MongoDb");
 }).catch((e) => {
     console.log(e);
 })

@@ -9,15 +9,15 @@ const SubjectsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    Subject_Course:{
+    Subject_Course: {
         type: String,
         require: true
     },
-    Subject_Branch:{
+    Subject_Branch: {
         type: String,
         require: true
     },
-    Subject_Semester:{
+    Subject_Semester: {
         type: String,
         require: true
     },
@@ -27,19 +27,19 @@ const SubjectsSchema = new mongoose.Schema({
     },
     Chapters: [{
         Chapter_Name: { type: String, require: true },
-        Chapter_Order: { type: String, require: true},
+        Chapter_Order: { type: String, require: true },
         Subject_Name: { type: String, require: true },
-        Subject_Order:{ type: String, require: true  },
+        Subject_Order: { type: String, require: true },
         Topics: [{
             Topic_Name: { type: String, require: true },
-            Topic_Order: { type: String, require: true, unique:true },
+            Topic_Order: { type: String, require: true, unique: true },
             Topic_Description: { type: String, require: true },
-            Chapter_Order: { type: String, require: true},
+            Chapter_Order: { type: String, require: true },
             Topic_Url: { type: String, require: true },
             Topic_ImgUrl: { type: String, require: true }
         }]
     }]
-}, { autoIndex:false} )
+}, { autoIndex: false })
 
 const Subjects = new mongoose.model("Subjects", SubjectsSchema);
 
