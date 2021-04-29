@@ -123,7 +123,7 @@ router.get("/subjects/:subname", async (req, res) => {
     try {
         const subname = req.params.subname
         const ShowSubjects = await Subjects.findOne({ Subject_Name: subname })
-        res.send(ShowSubjects)
+        res.send(ShowSubjects);
     } catch (e) {
         res.send("nhi huva")
     }
@@ -153,5 +153,32 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
     }
 })
 
+
+
+// Here Now We Make Api For Mobile Enrollge App
+router.post("/subjects/:course/:branch/:semester", async (req, res) => {
+    try {
+        const course = req.params.course
+        const branch = req.params.branch
+        const semester = req.params.semester
+        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Semester: semester })
+        res.json(SelectedSubject);
+    } catch (e) {
+        res.status(402).json(e)
+    }
+});
+
+// API to Get Only Chapters
+router.post("/subjects/chapters/:course/:branch/:semester", async (req, res) => {
+    try {
+        const course = req.params.course
+        const branch = req.params.branch
+        const semester = req.params.semester
+        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Semester: semester }).select('Chapters Subject_Name')
+        res.send(SelectedSubject);
+    } catch (e) {
+        res.status(402).json(e)
+    }
+});
 
 module.exports = router

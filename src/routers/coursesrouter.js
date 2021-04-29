@@ -6,10 +6,10 @@ const Courses = require("../models/courses");
 router.post("/courses", async (req, res) => {
     try {
         const AddCourses = new Courses(req.body);
-        const insertCourses = await AddCourses.save();
-        res.status(200).send(insertCourses);
+        await AddCourses.save();
+        res.status(200).send(true);
     } catch (e) {
-        res.status(400).send(e)
+        res.status(400).send(false)
     }
 })
 
@@ -101,6 +101,23 @@ router.patch("/courses/topics/:idc/:idt", async (req, res) => {
         res.send(e);
     }
 })
+
+// API For App 
+
+
+// API to Get Courses on Basis of Course Type
+router.post("/courses/:coursetype", async (req, res) => {
+    try {
+        const coursetype = req.params.coursetype
+        const SelectedCourses = await Courses.find({ Courses_Type: coursetype });
+        res.send(SelectedCourses);
+
+    } catch (e) {
+        res.status(400).send(e);
+    }
+})
+
+
 
 
 module.exports = router;

@@ -10,6 +10,11 @@ const subjectsrouter = require("./routers/subjectsrouter");
 const coursesrouter = require("./routers/coursesrouter");
 const adminrouter = require("./routers/adminrouter");
 const cookieparser = require("cookie-parser");
+const coursescategoriesrouter = require('./routers/coursescategoriesrouter');
+const reportsrouter = require('./routers/reportsrouter');
+const coursestypesrouter = require('./routers/coursestypesrouter');
+const feedbackrouter = require('./routers/feedbackrouter');
+const settings = require('./routers/settingsrouter');
 
 
 app.use(cors());
@@ -23,6 +28,11 @@ app.use(studentsrouter);
 app.use(subjectsrouter);
 app.use(coursesrouter);
 app.use(adminrouter);
+app.use(coursescategoriesrouter);
+app.use(reportsrouter);
+app.use(coursestypesrouter);
+app.use(feedbackrouter);
+app.use(settings);
 
 app.use(express.static(path.join(__dirname, 'build')));
 
