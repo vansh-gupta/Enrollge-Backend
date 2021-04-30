@@ -104,14 +104,12 @@ router.patch("/courses/topics/:idc/:idt", async (req, res) => {
 
 // API For App 
 
-
 // API to Get Courses on Basis of Course Type
 router.post("/courses/:coursetype", async (req, res) => {
     try {
         const coursetype = req.params.coursetype
         const SelectedCourses = await Courses.find({ Courses_Type: coursetype });
         res.send(SelectedCourses);
-
     } catch (e) {
         res.status(400).send(e);
     }

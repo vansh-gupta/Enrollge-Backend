@@ -24,7 +24,6 @@ router.post("/students/register", async (req, res) => {
         const AddStudent = new Students({ Full_Name, Course, Branch, Semester, Gmail_Id, Mobile_No, College_Name, Password, CPassword })
 
         // Here Use Middle Ware of Bcrypt js 
-
         await AddStudent.save();
         res.status(201).json(true)
 
@@ -46,12 +45,12 @@ router.post("/students/login", async (req, res) => {
         const isMatch = await bcrypt.compare(Password, StudentLogin.Password);
 
         if (!isMatch) {
-            return (res.status(422).json({isLogin: false}))
+            return (res.status(422).json({ isLogin: false }))
         } else {
             const token = await StudentLogin.generateAuthToken();
             console.log(token);
             res.cookie("jwtstudent", token);
-            return (res.status(200).json({isLogin: true, token: token}))
+            return (res.status(200).json({ isLogin: true, token: token }))
         }
 
     } catch (e) {
@@ -75,7 +74,7 @@ router.post("/students/:token", async (req, res) => {
     try {
         const token = req.params.token
         const VerifyStudent = jwt.verify(token, process.env.SECRETKEY)
-         const GetStudent = await Students.findOne({ _id: VerifyStudent._id }).select('Full_Name Course Branch Semester Gmail_Id Mobile_No College_Name');
+        const GetStudent = await Students.findOne({ _id: VerifyStudent._id }).select('Full_Name Course Branch Semester Gmail_Id Mobile_No College_Name');
         res.send(GetStudent);
     } catch (e) {
         res.status(400).send(e);

@@ -20,7 +20,7 @@ router.get("/coursescategories", async (req, res) => {
         const ShowCoursesCategories = await CoursesCategories.find({});
         res.status(200).send(ShowCoursesCategories);
     } catch (err) {
-        res.status(402).json(e)
+        res.status(402).json(e);
     }
 })
 
@@ -29,9 +29,9 @@ router.delete('/coursecategory/:id', async (req, res) => {
     try {
         const _id = req.params.id
         await CoursesCategories.findByIdAndDelete({ _id: _id });
-        res.status(202).json(true)
+        res.status(202).json(true);
     } catch (error) {
-        res.status(402).json(false)
+        res.status(402).json(false);
     }
 })
 
@@ -40,9 +40,9 @@ router.patch('/coursecategory/:id', async (req, res) => {
     try {
         const _id = req.params.id
         await CoursesCategories.updateOne({ _id: _id }, req.body, { new: true });
-        res.status(200).send(true)
+        res.status(200).send(true);
     } catch (error) {
-        res.status(402).json(false)
+        res.status(402).json(false);
     }
 })
 

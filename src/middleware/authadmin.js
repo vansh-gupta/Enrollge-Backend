@@ -11,5 +11,4 @@ const authadmin = async (req, res, next) => {
     }
 }
 
-
 module.exports = authadmin;

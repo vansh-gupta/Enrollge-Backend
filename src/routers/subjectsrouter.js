@@ -34,7 +34,6 @@ router.patch("/subjects/:id", async (req, res) => {
     }
 })
 
-
 // Here, We Handle Patch Request For Update Chapter of Subject Details
 router.patch("/subjects/chapters/:ids/:idc", async (req, res) => {
     try {
@@ -46,6 +45,7 @@ router.patch("/subjects/chapters/:ids/:idc", async (req, res) => {
         res.send(false);
     }
 })
+
 // Here, We Handle Patch Request For Update Topics of Chapter of Subject Details
 router.patch("/subjects/chapters/topics/:ids/:idc/:topicindex", async (req, res) => {
     try {
@@ -60,7 +60,6 @@ router.patch("/subjects/chapters/topics/:ids/:idc/:topicindex", async (req, res)
     }
 })
 
-
 // Here We Will Handle the Put Request For Adding Chapter in Subjects
 router.put("/subjects/chapters/:id", async (req, res) => {
     try {
@@ -71,6 +70,7 @@ router.put("/subjects/chapters/:id", async (req, res) => {
         res.send(false);
     }
 })
+
 // Here We Will Handle the Put Request For Adding Topics in Subjects of Chapter
 router.put("/subjects/chapters/topics/:ids/:idc", async (req, res) => {
     try {
@@ -105,6 +105,7 @@ router.get("/subject/:id", async (req, res) => {
         res.send(e);
     }
 })
+
 // Now We Handle Get Request For Individuals Subjects And Chapters
 router.get("/subject/chapter/:ids/:idc", async (req, res) => {
     try {
@@ -116,7 +117,6 @@ router.get("/subject/chapter/:ids/:idc", async (req, res) => {
         res.send(e);
     }
 })
-
 
 // Here We Handle Get Request For Search Subject By Name
 router.get("/subjects/:subname", async (req, res) => {
@@ -140,6 +140,7 @@ router.delete("/subjects/chapters/:ids/:idc", async (req, res) => {
         res.send(false)
     }
 })
+
 // Here We Handle Delete Request for Deleting Topic
 router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
     try {
@@ -152,8 +153,6 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
         res.send(false);
     }
 })
-
-
 
 // Here Now We Make Api For Mobile Enrollge App
 router.post("/subjects/:course/:branch/:semester", async (req, res) => {

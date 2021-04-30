@@ -41,7 +41,6 @@ app.get("/", async (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-
 app.listen(PORT, () => {
     console.log(`Connection is Live at Port No. ${PORT}`);
 })
