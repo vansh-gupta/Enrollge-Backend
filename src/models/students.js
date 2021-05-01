@@ -18,7 +18,7 @@ const StudentsSchema = mongoose.Schema({
         require: true,
         trim: true
     },
-    Semester: {
+    Year: {
         type: Number,
         require: true,
     },
