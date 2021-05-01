@@ -17,7 +17,7 @@ const SubjectsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    Subject_Semester: {
+    Subject_Year: {
         type: String,
         require: true
     },

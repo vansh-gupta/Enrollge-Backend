@@ -155,12 +155,12 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
 })
 
 // Here Now We Make Api For Mobile Enrollge App
-router.post("/subjects/:course/:branch/:semester", async (req, res) => {
+router.post("/subjects/:course/:branch/:year", async (req, res) => {
     try {
         const course = req.params.course
         const branch = req.params.branch
-        const semester = req.params.semester
-        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Semester: semester })
+        const year = req.params.year
+        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Year: year })
         res.json(SelectedSubject);
     } catch (e) {
         res.status(402).json(e)
@@ -168,12 +168,12 @@ router.post("/subjects/:course/:branch/:semester", async (req, res) => {
 });
 
 // API to Get Only Chapters
-router.post("/subjects/chapters/:course/:branch/:semester", async (req, res) => {
+router.post("/subjects/chapters/:course/:branch/:year", async (req, res) => {
     try {
         const course = req.params.course
         const branch = req.params.branch
-        const semester = req.params.semester
-        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Semester: semester }).select('Chapters Subject_Name')
+        const year = req.params.year
+        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Year: year }).select('Chapters Subject_Name')
         res.send(SelectedSubject);
     } catch (e) {
         res.status(402).json(e)
