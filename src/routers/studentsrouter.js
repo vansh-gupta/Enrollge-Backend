@@ -49,7 +49,6 @@ router.post("/students/login", async (req, res) => {
             return (res.status(422).json({ isLogin: false }))
         } else {
             const token = await StudentLogin.generateAuthToken();
-            console.log(token);
             res.cookie("jwtstudent", token);
             return (res.status(200).json({ isLogin: true, token: token }))
         }

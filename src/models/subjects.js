@@ -14,7 +14,7 @@ const SubjectsSchema = new mongoose.Schema({
         require: true
     },
     Subject_Branch: {
-        type: String,
+        type: Array,
         require: true
     },
     Subject_Year: {

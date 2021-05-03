@@ -160,7 +160,13 @@ router.post("/subjects/:course/:branch/:year", async (req, res) => {
         const course = req.params.course
         const branch = req.params.branch
         const year = req.params.year
-        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Year: year })
+        const SelectedSubject = await Subjects.find({
+            $and: [
+                { Subject_Branch: { $in: branch } },
+                { Subject_Course: course },
+                { Subject_Year: year }
+            ]
+        })
         res.json(SelectedSubject);
     } catch (e) {
         res.status(402).json(e)
