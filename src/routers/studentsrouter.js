@@ -7,9 +7,9 @@ const jwt = require("jsonwebtoken");
 // Here We Will Handle Post Request (To Create Or To Register) Students in th App
 router.post("/students/register", async (req, res) => {
     try {
-        const { Full_Name, Course, Branch, Year, Gmail_Id, Mobile_No, College_Name, Password, CPassword } = req.body;
+        const { Full_Name, Course, Branch, Year, Gmail_Id, Mobile_No, University_Name, Password, CPassword } = req.body;
 
-        if (!Full_Name || !Course || !Branch || !Year || !Gmail_Id || !Mobile_No || !College_Name || !Password || !CPassword) {
+        if (!Full_Name || !Course || !Branch || !Year || !Gmail_Id || !Mobile_No || !University_Name || !Password || !CPassword) {
             return (res.status(422).json("Please fill the Details Properly"))
         }
 
@@ -22,7 +22,7 @@ router.post("/students/register", async (req, res) => {
             return (res.status(422).json("Please Enter the Same Password"))
         }
 
-        const AddStudent = new Students({ Full_Name, Course, Branch, Year, Gmail_Id, Mobile_No, College_Name, Password, CPassword })
+        const AddStudent = new Students({ Full_Name, Course, Branch, Year, Gmail_Id, Mobile_No, University_Name, Password, CPassword })
 
         // Here Use Middle Ware of Bcrypt js 
         await AddStudent.save();
@@ -74,7 +74,7 @@ router.post("/students/:token", async (req, res) => {
     try {
         const token = req.params.token
         const VerifyStudent = jwt.verify(token, process.env.SECRETKEY)
-        const GetStudent = await Students.findOne({ _id: VerifyStudent._id }).select('Full_Name Course Branch Year Gmail_Id Mobile_No College_Name');
+        const GetStudent = await Students.findOne({ _id: VerifyStudent._id }).select('Full_Name Course Branch Year Gmail_Id Mobile_No University_Name');
         res.send(GetStudent);
     } catch (e) {
         res.status(400).send(e);

@@ -31,7 +31,7 @@ const StudentsSchema = mongoose.Schema({
         require: true,
         unique: true
     },
-    College_Name: {
+    University_Name: {
         type: String,
         require: true,
         trim: true

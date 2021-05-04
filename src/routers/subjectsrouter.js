@@ -155,14 +155,16 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
 })
 
 // Here Now We Make Api For Mobile Enrollge App
-router.post("/subjects/:course/:branch/:year", async (req, res) => {
+router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
     try {
         const course = req.params.course
+        const university = req.params.university
         const branch = req.params.branch
         const year = req.params.year
         const SelectedSubject = await Subjects.find({
             $and: [
                 { Subject_Branch: { $in: branch } },
+                { Subject_University: { $in: university } },
                 { Subject_Course: course },
                 { Subject_Year: year }
             ]

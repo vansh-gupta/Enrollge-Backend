@@ -9,6 +9,10 @@ const SubjectsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    Subject_University: {
+        type: Array,
+        require: true
+    },
     Subject_Course: {
         type: String,
         require: true

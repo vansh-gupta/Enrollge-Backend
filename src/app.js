@@ -15,6 +15,7 @@ const reportsrouter = require('./routers/reportsrouter');
 const coursestypesrouter = require('./routers/coursestypesrouter');
 const feedbackrouter = require('./routers/feedbackrouter');
 const settings = require('./routers/settingsrouter');
+const university = require('./routers/universityrouter');
 
 
 app.use(cors());
@@ -33,6 +34,7 @@ app.use(reportsrouter);
 app.use(coursestypesrouter);
 app.use(feedbackrouter);
 app.use(settings);
+app.use(university);
 
 // app.use(express.static(path.join(__dirname, 'build')));
 
