@@ -8,7 +8,7 @@ const CoursesSchema = new mongoose.Schema({
     Courses_ImgUrl: { type: String, required: true },
     Courses_Topics: [{
         Courses_TopicName: { type: String, require: true },
-        Courses_TopicOrder: { type: Number, require: true, unique: true },
+        Courses_TopicOrder: { type: Number, require: true },
         Courses_TopicDescription: { type: String, require: true },
         Courses_TopicUrl: { type: String, require: true },
         Courses_TopicSource: { type: String, require: true },
