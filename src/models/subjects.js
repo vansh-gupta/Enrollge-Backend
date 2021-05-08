@@ -35,7 +35,7 @@ const SubjectsSchema = new mongoose.Schema({
             Topic_Order: { type: String, require: true },
             Topic_Description: { type: String, require: true },
             Chapter_Order: { type: String, require: true },
-            Topic_ImgUrl: { type: String, require: true },
+            Topic_ImgUrl: { type: String, default: 'https://firebasestorage.googleapis.com/v0/b/vidmax-9f2ce.appspot.com/o/Enrollge%20Images%2Ffinallogo.png?alt=media&token=0d308e5c-314f-41a4-88b6-8d0d96e64d8b', require: true },
             Topic_Source: { type: String, require: true },
             Topic_Url: { type: String, require: true }
         }]
