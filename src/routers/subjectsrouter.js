@@ -16,7 +16,7 @@ router.post("/subjects", async (req, res) => {
 // Here, We Handle Get Request
 router.get("/subjects", async (req, res) => {
     try {
-        const ShowSubjects = await Subjects.find({});
+        const ShowSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
         res.send(ShowSubjects);
     } catch (e) {
         res.status(400).send(e);
