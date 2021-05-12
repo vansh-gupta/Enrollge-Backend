@@ -13,11 +13,29 @@ router.post("/subjects", async (req, res) => {
     }
 })
 
-// Here, We Handle Get Request
+// Here, We Handle Get Request For Subjects
 router.get("/subjects", async (req, res) => {
     try {
-        const ShowSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        res.send(ShowSubjects);
+        const subjectname = req.query.subjectname
+        const course = req.query.course
+        const branch = req.query.branch
+        const year = req.query.year
+        const university = req.query.university
+        const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByNameSubjects = await Subjects.find({ Subject_Name: { $in: subjectname } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByCourseSubjects = await Subjects.find({ Subject_Course: { $in: course } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByBranchSubjects = await Subjects.find({ Subject_Branch: { $in: branch } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByYearSubjects = await Subjects.find({ Subject_Year: { $in: year } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: { $in: university } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+
+        const Subject = {}
+        Subject.ShowAllSubjects = ShowAllSubjects
+        Subject.ShowByNameSubjects = ShowByNameSubjects
+        Subject.ShowByCourseSubjects = ShowByCourseSubjects
+        Subject.ShowByBranchSubjects = ShowByBranchSubjects
+        Subject.ShowByYearSubjects = ShowByYearSubjects
+        Subject.ShowByUniversitySubjects = ShowByUniversitySubjects
+        res.send(Subject);
     } catch (e) {
         res.status(400).send(e);
     }
@@ -118,17 +136,6 @@ router.get("/subject/chapter/:ids/:idc", async (req, res) => {
     }
 })
 
-// Here We Handle Get Request For Search Subject By Name
-router.get("/subjects/:subname", async (req, res) => {
-    try {
-        const subname = req.params.subname
-        const ShowSubjects = await Subjects.findOne({ Subject_Name: subname })
-        res.send(ShowSubjects);
-    } catch (e) {
-        res.send("nhi huva")
-    }
-})
-
 // Here We Handle Delete Request for Deleting Chapter
 router.delete("/subjects/chapters/:ids/:idc", async (req, res) => {
     try {
@@ -168,21 +175,8 @@ router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
                 { Subject_Course: course },
                 { Subject_Year: year }
             ]
-        })
+        }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
         res.json(SelectedSubject);
-    } catch (e) {
-        res.status(402).json(e)
-    }
-});
-
-// API to Get Only Chapters
-router.post("/subjects/chapters/:course/:branch/:year", async (req, res) => {
-    try {
-        const course = req.params.course
-        const branch = req.params.branch
-        const year = req.params.year
-        const SelectedSubject = await Subjects.find({ Subject_Course: course, Subject_Branch: branch, Subject_Year: year }).select('Chapters Subject_Name')
-        res.send(SelectedSubject);
     } catch (e) {
         res.status(402).json(e)
     }

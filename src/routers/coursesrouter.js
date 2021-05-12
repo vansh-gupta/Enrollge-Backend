@@ -2,7 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const Courses = require("../models/courses");
 
-// Here We Will Handle Post Request to Create ExtraCoureses with Topics
+// Here We Will Handle Post Request to Create Coureses with Topics
 router.post("/courses", async (req, res) => {
     try {
         const AddCourses = new Courses(req.body);
@@ -24,7 +24,7 @@ router.put("/courses/:id", async (req, res) => {
     }
 })
 
-// Here We Will Handle Get Request to Get ExtraCoureses with Topics
+// Here We Will Handle Get Request to Get Coureses with Topics
 router.get("/courses", async (req, res) => {
     try {
         const ShowCourses = await Courses.find({}).sort({ Courses_Order: 1 });
@@ -34,7 +34,25 @@ router.get("/courses", async (req, res) => {
     }
 })
 
-// Here We Will Handle Get Request to Get ExtraCourese (Search by Id) with Topics
+// Here We Will Handle Get Request to For Searching Courses
+router.get("/course", async (req, res) => {
+    try {
+        const coursetype = req.query.coursetype
+        const coursename = req.query.coursename
+        const ShowByCourseType = await Courses.find({ Courses_Type: { $in: coursetype } }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByCourseName = await Courses.find({ Courses_Name: { $in: coursename } }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowAllCourses = await Courses.find({}).sort({ Courses_Order: 1 });
+        const Course = {}
+        Course.ShowAllCourses = ShowAllCourses
+        Course.ShowByCourseName = ShowByCourseName
+        Course.ShowByCourseType = ShowByCourseType
+        res.send(Course);
+    } catch (e) {
+        res.send(e)
+    }
+})
+
+// Here We Will Handle Get Request to Get Courese (Search by Id) with Topics
 router.get("/courses/:id", async (req, res) => {
     try {
         const _id = req.params.id
@@ -114,8 +132,5 @@ router.post("/courses/:coursetype", async (req, res) => {
         res.status(400).send(e);
     }
 })
-
-
-
 
 module.exports = router;

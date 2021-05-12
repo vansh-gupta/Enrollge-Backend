@@ -62,8 +62,32 @@ router.post("/students/login", async (req, res) => {
 // Now, We handle Get Request (To Get Data)
 router.get("/students", async (req, res) => {
     try {
-        const GetStudents = await Students.find({}).sort({ "Year": -1 })
-        res.send(GetStudents);
+        const studentname = req.query.studentname
+        const studentnumber = req.query.studentnumber
+        const studentemail = req.query.studentemail
+        const studentcourse = req.query.studentcourse
+        const studentbranch = req.query.studentbranch
+        const studentyear = req.query.studentyear
+        const studentuniversity = req.query.studentuniversity
+        const ShowAllStudents = await Students.find({}).sort({ _id: 1 })
+        const ShowByStudentName = await Students.find({ Full_Name: { $in: studentname } }).sort({ _id: 1 })
+        const ShowByStudentNumber = await Students.find({ Mobile_No: { $in: studentnumber } }).sort({ _id: 1 })
+        const ShowByStudentEmail = await Students.find({ Gmail_Id: { $in: studentemail } }).sort({ _id: 1 })
+        const ShowByStudentCourse = await Students.find({ Course: { $in: studentcourse } }).sort({ _id: 1 })
+        const ShowByStudentBranch = await Students.find({ Branch: { $in: studentbranch } }).sort({ _id: 1 })
+        const ShowByStudentYear = await Students.find({ Year: { $in: studentyear } }).sort({ _id: 1 })
+        const ShowByStudentUniversity = await Students.find({ University_Name: { $in: studentuniversity } }).sort({ _id: 1 })
+
+        const Student = {}
+        Student.ShowAllStudents = ShowAllStudents
+        Student.ShowByStudentName = ShowByStudentName
+        Student.ShowByStudentNumber = ShowByStudentNumber
+        Student.ShowByStudentEmail = ShowByStudentEmail
+        Student.ShowByStudentCourse = ShowByStudentCourse
+        Student.ShowByStudentBranch = ShowByStudentBranch
+        Student.ShowByStudentYear = ShowByStudentYear
+        Student.ShowByStudentUniversity = ShowByStudentUniversity
+        res.send(Student);
     } catch (e) {
         res.status(400).send(e);
     }
@@ -96,10 +120,10 @@ router.patch("/students/:id", async (req, res) => {
 router.delete("/students/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const DeleteStudent = await Students.findByIdAndDelete(_id);
-        res.send(DeleteStudent);
+        await Students.findByIdAndDelete(_id);
+        res.send(true);
     } catch (e) {
-        res.status(500).send(e);
+        res.status(500).send(false);
     }
 });
 
