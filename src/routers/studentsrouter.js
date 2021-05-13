@@ -75,7 +75,7 @@ router.get("/students", async (req, res) => {
         const ShowByStudentEmail = await Students.find({ Gmail_Id: new RegExp(studentemail, 'i') }).sort({ _id: 1 })
         const ShowByStudentCourse = await Students.find({ Course: new RegExp(studentcourse, 'i') }).sort({ _id: 1 })
         const ShowByStudentBranch = await Students.find({ Branch: new RegExp(studentbranch, 'i') }).sort({ _id: 1 })
-        const ShowByStudentYear = await Students.find({ Year: new RegExp(studentyear, 'i') }).sort({ _id: 1 })
+        const ShowByStudentYear = await Students.find({ Year: { $in: studentyear } }).sort({ _id: 1 })
         const ShowByStudentUniversity = await Students.find({ University_Name: new RegExp(studentuniversity, 'i') }).sort({ _id: 1 })
 
         const Student = {}
