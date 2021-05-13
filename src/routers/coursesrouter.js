@@ -39,8 +39,8 @@ router.get("/course", async (req, res) => {
     try {
         const coursetype = req.query.coursetype
         const coursename = req.query.coursename
-        const ShowByCourseType = await Courses.find({ Courses_Type: { $in: coursetype } }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByCourseName = await Courses.find({ Courses_Name: { $in: coursename } }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByCourseType = await Courses.find({ Courses_Type: new RegExp(coursetype, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByCourseName = await Courses.find({ Courses_Name: new RegExp(coursename, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
         const ShowAllCourses = await Courses.find({}).sort({ Courses_Order: 1 });
         const Course = {}
         Course.ShowAllCourses = ShowAllCourses

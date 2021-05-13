@@ -22,11 +22,11 @@ router.get("/subjects", async (req, res) => {
         const year = req.query.year
         const university = req.query.university
         const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByNameSubjects = await Subjects.find({ Subject_Name: { $in: subjectname } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByCourseSubjects = await Subjects.find({ Subject_Course: { $in: course } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByBranchSubjects = await Subjects.find({ Subject_Branch: { $in: branch } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByYearSubjects = await Subjects.find({ Subject_Year: { $in: year } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: { $in: university } }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByNameSubjects = await Subjects.find({ Subject_Name: new RegExp(subjectname, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByCourseSubjects = await Subjects.find({ Subject_Course: new RegExp(course, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByBranchSubjects = await Subjects.find({ Subject_Branch: new RegExp(branch, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByYearSubjects = await Subjects.find({ Subject_Year: new RegExp(year, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: new RegExp(university, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
 
         const Subject = {}
         Subject.ShowAllSubjects = ShowAllSubjects
