@@ -3,6 +3,7 @@ const router = new express.Router();
 const Students = require("../models/students");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const EmailValidator = require('email-deep-validator');
 
 // Here We Will Handle Post Request (To Create Or To Register) Students in th App
 router.post("/students/register", async (req, res) => {
@@ -92,6 +93,20 @@ router.get("/students", async (req, res) => {
         res.status(400).send(e);
     }
 });
+
+
+// Now, We Handle API For Email Address, Verify email address checking MX records, and SMTP connection.
+router.get('/students/checkemail', async (req, res) => {
+    try {
+        const email = req.query.email
+        const emailValidator = new EmailValidator();
+        const { wellFormed, validDomain, validMailbox } = await emailValidator.verify(email);
+        res.json({ wellFormed: wellFormed, validDomain: validDomain, validMailbox: validMailbox })
+    } catch (error) {
+        res.status(400).json({ error: false });
+    }
+})
+
 
 // Now, We handle Get Request for Individuals
 router.post("/students/:token", async (req, res) => {
