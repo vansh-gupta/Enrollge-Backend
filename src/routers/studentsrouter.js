@@ -57,7 +57,7 @@ router.post("/students/login", async (req, res) => {
     } catch (e) {
         res.status(401).send(e);
     }
-})
+});
 
 
 // Now, We handle Get Request (To Get Data)
@@ -106,6 +106,38 @@ router.get('/students/checkemail', async (req, res) => {
         res.status(400).json({ error: false });
     }
 })
+
+// Now, here We handle API For Email Checking That its Already Exits ?
+router.get('/students/checkgmail', async (req, res) => {
+    try {
+        const gmail = req.query.gmail
+        const CheckEmail = await Students.find({ Gmail_Id: gmail }).countDocuments();
+        if (CheckEmail === 1) {
+            res.json({ EmailExist: true });
+        }
+        if (CheckEmail === 0) {
+            res.json({ EmailExist: false });
+        }
+    } catch (error) {
+        res.status(400).json({ error: false });
+    }
+});
+
+// Now, here We handle API For Mobile Number Checking That its Already Exits ?
+router.get('/students/checknumber', async (req, res) => {
+    try {
+        const number = req.query.number
+        const CheckNumber = await Students.find({ Mobile_No: new RegExp(number, 'i') }).countDocuments()
+        if (CheckNumber === 1) {
+            res.json({ NumberExist: true })
+        }
+        if (CheckNumber === 0) {
+            res.json({ NumberExist: false })
+        }
+    } catch (error) {
+        res.status(400).json({ error: false });
+    }
+});
 
 
 // Now, We handle Get Request for Individuals
