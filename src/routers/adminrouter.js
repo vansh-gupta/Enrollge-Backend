@@ -67,7 +67,23 @@ router.post("/admin/login", async (req, res) => {
     }
 })
 
-router.post('/admin/login/token')
+// Now We Handle Post Request For Changing Password of Admin Panel 
+router.post('/admin/resetpassword', async (req, res) => {
+    try {
+        const email_address = req.query.gmail
+        const { Password, CPassword } = req.body
+        if (Password === CPassword) {
+            const HashPassword = await bcrypt.hash(Password, 12);
+            const HashCPassword = await bcrypt.hash(CPassword, 12);
+            await Admin.findOneAndUpdate({ email_address: new RegExp(email_address, 'i') }, { Password: HashPassword, CPassword: HashCPassword }, { new: true });
+            res.status(200).send({ PasswordChange: true });
+        } else {
+            res.status(422).send("Please Enter the Same Password");
+        }
+    } catch (error) {
+        res.status(401).send({ PasswordChange: false });
+    }
+})
 
 //  Here We Handle the Api to get last element of array
 router.post('/admin/token/:email', async (req, res) => {
@@ -75,7 +91,6 @@ router.post('/admin/token/:email', async (req, res) => {
         const email = req.params.email
         const token = await Admin.find({ email_address: email }, { 'tokens': { $slice: -1 } })
         res.send(token)
-
     } catch (e) {
         res.send(e)
     }

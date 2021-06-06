@@ -59,6 +59,24 @@ router.post("/students/login", async (req, res) => {
     }
 });
 
+// Now We Handle Post Request For Changing Password of Students Account
+router.post('/students/resetpassword', async (req, res) => {
+    try {
+        const Mobile_No = req.query.studentnumber
+        const { Password, CPassword } = req.body
+        if (Password === CPassword) {
+            const HashPassword = await bcrypt.hash(Password, 12);
+            const HashCPassword = await bcrypt.hash(CPassword, 12);
+            await Students.findOneAndUpdate({ Mobile_No: new RegExp(Mobile_No, 'i') }, { Password: HashPassword, CPassword: HashCPassword }, { new: true });
+            res.status(200).json({ PasswordChange: true });
+        } else {
+            res.status(422).json("Please Enter the Same Password");
+        }
+    } catch (error) {
+        res.status(401).json({ PasswordChange: false });
+    }
+})
+
 
 // Now, We handle Get Request (To Get Data)
 router.get("/students", async (req, res) => {
