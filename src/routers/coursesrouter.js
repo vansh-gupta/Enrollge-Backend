@@ -30,25 +30,29 @@ router.get("/courses", async (req, res) => {
         const ShowCourses = await Courses.find({}).sort({ Courses_Order: 1 });
         res.send(ShowCourses);
     } catch (e) {
-        res.send(e)
+        res.send(e);
     }
 })
 
-// Here We Will Handle Get Request to For Searching Courses
-router.get("/course", async (req, res) => {
+// Here We Will Handle Get Request For Searching Courses By CourseType
+router.get("/courses/coursetype/:coursetype", async (req, res) => {
     try {
-        const coursetype = req.query.coursetype
-        const coursename = req.query.coursename
-        const ShowByCourseType = await Courses.find({ Courses_Type: new RegExp(coursetype, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowByCourseName = await Courses.find({ Courses_Name: new RegExp(coursename, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
-        const ShowAllCourses = await Courses.find({}).sort({ Courses_Order: 1 });
-        const Course = {}
-        Course.ShowAllCourses = ShowAllCourses
-        Course.ShowByCourseName = ShowByCourseName
-        Course.ShowByCourseType = ShowByCourseType
-        res.send(Course);
+        const coursetype = req.params.coursetype
+        const ShowByCourseType = await Courses.find({ Courses_Type: new RegExp(coursetype, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        res.send(ShowByCourseType);
     } catch (e) {
-        res.send(e)
+        res.send(e);
+    }
+})
+
+// Here We Will Handle Get Request For Searching Courses By Course Name
+router.get("/courses/coursename/:coursename", async (req, res) => {
+    try {
+        const coursename = req.params.coursename
+        const ShowByCourseName = await Courses.find({ Courses_Name: new RegExp(coursename, 'i') }).sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        res.send(ShowByCourseName);
+    } catch (e) {
+        res.send(e);
     }
 })
 

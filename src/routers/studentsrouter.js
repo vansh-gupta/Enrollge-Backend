@@ -75,43 +75,95 @@ router.post('/students/resetpassword', async (req, res) => {
     } catch (error) {
         res.status(401).json({ PasswordChange: false });
     }
-})
+});
 
 
 // Now, We handle Get Request (To Get Data)
 router.get("/students", async (req, res) => {
     try {
-        const studentname = req.query.studentname
-        const studentnumber = req.query.studentnumber
-        const studentemail = req.query.studentemail
-        const studentcourse = req.query.studentcourse
-        const studentbranch = req.query.studentbranch
-        const studentyear = req.query.studentyear
-        const studentuniversity = req.query.studentuniversity
-        const ShowAllStudents = await Students.find({}).sort({ _id: 1 })
-        const ShowByStudentName = await Students.find({ Full_Name: new RegExp(studentname, 'i') }).sort({ _id: 1 })
-        const ShowByStudentNumber = await Students.find({ Mobile_No: new RegExp(studentnumber, 'i') }).sort({ _id: 1 })
-        const ShowByStudentEmail = await Students.find({ Gmail_Id: new RegExp(studentemail, 'i') }).sort({ _id: 1 })
-        const ShowByStudentCourse = await Students.find({ Course: new RegExp(studentcourse, 'i') }).sort({ _id: 1 })
-        const ShowByStudentBranch = await Students.find({ Branch: new RegExp(studentbranch, 'i') }).sort({ _id: 1 })
-        const ShowByStudentYear = await Students.find({ Year: { $in: studentyear } }).sort({ _id: 1 })
-        const ShowByStudentUniversity = await Students.find({ University_Name: new RegExp(studentuniversity, 'i') }).sort({ _id: 1 })
-
-        const Student = {}
-        Student.ShowAllStudents = ShowAllStudents
-        Student.ShowByStudentName = ShowByStudentName
-        Student.ShowByStudentNumber = ShowByStudentNumber
-        Student.ShowByStudentEmail = ShowByStudentEmail
-        Student.ShowByStudentCourse = ShowByStudentCourse
-        Student.ShowByStudentBranch = ShowByStudentBranch
-        Student.ShowByStudentYear = ShowByStudentYear
-        Student.ShowByStudentUniversity = ShowByStudentUniversity
-        res.send(Student);
+        const ShowAllStudents = await Students.find({}).sort({ _id: 1 });
+        res.send(ShowAllStudents);
     } catch (e) {
         res.status(400).send(e);
     }
 });
 
+// Now, We handle Get Request (To Get Data of Students By Name)
+router.get("/students/name/:studentname", async (req, res) => {
+    try {
+        const studentname = req.params.studentname
+        const ShowByStudentName = await Students.find({ Full_Name: new RegExp(studentname, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentName);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By Number)
+router.get("/students/number/:studentnumber", async (req, res) => {
+    try {
+        const studentnumber = req.params.studentnumber
+        const ShowByStudentNumber = await Students.find({ Mobile_No: new RegExp(studentnumber, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentNumber);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By Email)
+router.get("/students/email/:studentemail", async (req, res) => {
+    try {
+        const studentemail = req.params.studentemail
+        const ShowByStudentEmail = await Students.find({ Gmail_Id: new RegExp(studentemail, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentEmail);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By Course)
+router.get("/students/course/:studentcourse", async (req, res) => {
+    try {
+        const studentcourse = req.params.studentcourse
+        const ShowByStudentCourse = await Students.find({ Course: new RegExp(studentcourse, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentCourse);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By Branch)
+router.get("/students/branch/:studentbranch", async (req, res) => {
+    try {
+        const studentbranch = req.params.studentbranch
+        const ShowByStudentBranch = await Students.find({ Branch: new RegExp(studentbranch, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentBranch);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By Year)
+router.get("/students/year/:studentyear", async (req, res) => {
+    try {
+        const studentyear = req.params.studentyear
+        const ShowByStudentYear = await Students.find({ Year: { $in: studentyear } }).sort({ _id: 1 });
+        res.send(ShowByStudentYear);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
+// Now, We handle Get Request (To Get Data of Students By University)
+router.get("/students/university/:studentuniversity", async (req, res) => {
+    try {
+        const studentuniversity = req.params.studentuniversity
+        const ShowByStudentUniversity = await Students.find({ University_Name: new RegExp(studentuniversity, 'i') }).sort({ _id: 1 });
+        res.send(ShowByStudentUniversity);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
 // Now, We Handle API For Email Address, Verify email address checking MX records, and SMTP connection.
 router.get('/students/checkemail', async (req, res) => {
