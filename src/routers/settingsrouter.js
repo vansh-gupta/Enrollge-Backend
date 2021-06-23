@@ -12,7 +12,7 @@ router.get('/settings', async (req, res) => {
     }
 })
 
-// API to Settings
+// API to Create Settings
 router.post('/settings', async (req, res) => {
     try {
         const AddTermsAndConditions = new Settings(req.body)
