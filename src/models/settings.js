@@ -4,7 +4,8 @@ const SettingsSchema = new mongoose.Schema({
     TermsAndConditions: { type: String, require: true, default: 'Terms And Conditions Should be Here' },
     AdsSettings: {
         AdmobSettings: {
-            AdmobEnable: { type: Boolean, default: true },
+            AdmobBannerEnable: { type: Boolean, default: true },
+            AdmobInterstitialEnable: { type: Boolean, default: true },
             AdmobAppId: { type: String, default: "ca-app-pub-5956148237187501~2069186334" },
             AdmobPublisherId: { type: String, default: "pub-5956148237187501~2069186334" },
             HomeInterstitialAdUnit: { type: String, default: "ca-app-pub-5956148237187501~2069186334" },
