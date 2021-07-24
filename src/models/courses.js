@@ -6,6 +6,7 @@ const CoursesSchema = new mongoose.Schema({
     Courses_Type: { type: String, required: true },
     Courses_Description: { type: String, required: true },
     Courses_ImgUrl: { type: String, required: true },
+    Course_Published: { type: Boolean, default: true },
     Courses_Topics: [{
         Courses_TopicName: { type: String, require: true },
         Courses_TopicOrder: { type: Number, require: true },

@@ -25,11 +25,16 @@ const SubjectsSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    Subject_Published: {
+        type: Boolean,
+        default: true
+    },
     Chapters: [{
         Chapter_Name: { type: String, require: true },
         Chapter_Order: { type: String, require: true },
         Subject_Name: { type: String, require: true },
         Subject_Order: { type: String, require: true },
+        Chapter_Published: { type: Boolean, default: true },
         Topics: [{
             Topic_Name: { type: String, require: true },
             Topic_Order: { type: String, require: true },
