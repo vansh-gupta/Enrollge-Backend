@@ -208,7 +208,7 @@ router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
         const SelectedSubject = await Subjects.find({
             $and: [
                 { Subject_Branch: { $in: branch } },
-                { Subject_University: { $in: university } },
+                { Subject_University: university },
                 { Subject_Course: course },
                 { Subject_Year: year }
             ]

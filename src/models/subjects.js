@@ -10,7 +10,7 @@ const SubjectsSchema = new mongoose.Schema({
         require: true
     },
     Subject_University: {
-        type: Array,
+        type: String,
         require: true
     },
     Subject_Course: {
