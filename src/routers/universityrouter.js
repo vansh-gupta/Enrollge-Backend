@@ -184,4 +184,82 @@ router.delete("/university/course/year/:idu/:idc/:idy", async (req, res) => {
     }
 })
 
+// API For Mobile App
+
+// Get Request for Getting Published Universities
+router.get("/universities/published", async (req, res) => {
+    try {
+        const PublishedUniversities = await University.find({ University_Published: true });
+        res.json(PublishedUniversities);
+    } catch (e) {
+        res.send(e);
+    }
+})
+
+// Get Request for Getting Courses According to University
+router.get("/university/:university/courses/published", async (req, res) => {
+    try {
+        const university = req.params.university
+        const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
+        const courses = await selectedUniversity[0].University_Courses
+        const coursesOptions = await courses.filter(function (value) {
+            return value.Course_Published = true
+        });
+        res.json(coursesOptions);
+    } catch (e) {
+        res.send(e);
+    }
+})
+
+// Get Request for Getting Branches According to Courses
+router.get("/university/:university/course/:course/branches/published", async (req, res) => {
+    try {
+        const university = req.params.university
+        const course = req.params.course
+        const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
+        const courses = await selectedUniversity[0].University_Courses
+        const coursesOptions = await courses.filter(function (value) {
+            return value.Course_Published = true
+        });
+        const selectedCourse = await coursesOptions.filter(function (value) {
+            return value.Course_Name = course
+        });
+
+        const branches = await selectedCourse[0].Course_Branches
+
+        const branchesOptions = await branches.filter(function (value) {
+            return value.Branch_Published = true
+        })
+        res.json(branchesOptions);
+    } catch (e) {
+        res.send(e);
+    }
+})
+
+// Get Request for Getting Years According to Courses
+router.get("/university/:university/course/:course/years/published", async (req, res) => {
+    try {
+        const university = req.params.university
+        const course = req.params.course
+        const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
+        const courses = await selectedUniversity[0].University_Courses
+        const coursesOptions = await courses.filter(function (value) {
+            return value.Course_Published = true
+        });
+        const selectedCourse = await coursesOptions.filter(function (value) {
+            return value.Course_Name = course
+        });
+
+        const years = await selectedCourse[0].Course_Years
+
+        const yearsOptions = await years.filter(function (value) {
+            return value.Year_Published = true
+        });
+
+        res.json(yearsOptions);
+    } catch (e) {
+        res.send(e);
+    }
+})
+
 module.exports = router
