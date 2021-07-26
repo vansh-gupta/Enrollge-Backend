@@ -202,9 +202,7 @@ router.get("/university/:university/courses/published", async (req, res) => {
         const university = req.params.university
         const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
         const courses = await selectedUniversity[0].University_Courses
-        const coursesOptions = await courses.filter(function (value) {
-            return value.Course_Published = true
-        });
+        const coursesOptions = await courses.filter(value => value.Course_Published === true);
         res.json(coursesOptions);
     } catch (e) {
         res.send(e);
@@ -218,18 +216,10 @@ router.get("/university/:university/course/:course/branches/published", async (r
         const course = req.params.course
         const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
         const courses = await selectedUniversity[0].University_Courses
-        const coursesOptions = await courses.filter(function (value) {
-            return value.Course_Published = true
-        });
-        const selectedCourse = await coursesOptions.filter(function (value) {
-            return value.Course_Name = course
-        });
-
-        const branches = await selectedCourse[0].Course_Branches
-
-        const branchesOptions = await branches.filter(function (value) {
-            return value.Branch_Published = true
-        })
+        const coursesOptions = await courses.filter(courses => courses.Course_Published === true);
+        const selectedCourse = await coursesOptions.find(value => value.Course_Name === course)
+        const branches = await selectedCourse.Course_Branches
+        const branchesOptions = await branches.filter(branches => branches.Branch_Published === true)
         res.json(branchesOptions);
     } catch (e) {
         res.send(e);
@@ -243,19 +233,10 @@ router.get("/university/:university/course/:course/years/published", async (req,
         const course = req.params.course
         const selectedUniversity = await University.find({ University_Published: true, University_Name: university });
         const courses = await selectedUniversity[0].University_Courses
-        const coursesOptions = await courses.filter(function (value) {
-            return value.Course_Published = true
-        });
-        const selectedCourse = await coursesOptions.filter(function (value) {
-            return value.Course_Name = course
-        });
-
-        const years = await selectedCourse[0].Course_Years
-
-        const yearsOptions = await years.filter(function (value) {
-            return value.Year_Published = true
-        });
-
+        const coursesOptions = await courses.filter(courses => courses.Course_Published === true);
+        const selectedCourse = await coursesOptions.find(value => value.Course_Name === course)
+        const years = await selectedCourse.Course_Years
+        const yearsOptions = await years.filter(years => years.Year_Published === true)
         res.json(yearsOptions);
     } catch (e) {
         res.send(e);
