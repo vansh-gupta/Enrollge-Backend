@@ -28,7 +28,7 @@ router.get("/universities", async (req, res) => {
 router.get("/university/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const ShowUniversityCourses = await University.find({ _id: _id });
+        const ShowUniversityCourses = await University.find({ _id: _id }).select('University_Published University_Name University_Courses');
         res.status(200).send(ShowUniversityCourses);
     } catch (err) {
         res.status(402).json(err);
@@ -240,6 +240,54 @@ router.get("/university/:university/course/:course/years/published", async (req,
         res.json(yearsOptions);
     } catch (e) {
         res.send(e);
+    }
+})
+
+//  Routing For University News
+
+// Get Resuest For Getting Only Uiversity News
+router.get("/university/news/:idu", async (req, res) => {
+    try {
+        const _id = req.params.idu
+        const ShowUniversityNews = await University.find({ _id: _id }).select('University_News');
+        res.status(200).send(ShowUniversityNews);
+    } catch (err) {
+        res.status(402).json(err);
+    }
+});
+
+//  API to Add News in the University
+router.put('/university/news/:idu', async (req, res) => {
+    try {
+        const _id = req.params.idu
+        await University.updateOne({ _id: _id }, { $push: { 'University_News': req.body } }, { new: true });
+        res.status(200).send(true);
+    } catch (error) {
+        res.status(402).json(false);
+    }
+});
+
+// Here We Handle Delete Request for Deleting University News
+router.delete("/university/news/:idu/:idn", async (req, res) => {
+    try {
+        const _idu = req.params.idu
+        const _idn = req.params.idn
+        await University.updateOne({ _id: _idu }, { $pull: { "University_News": { "_id": _idn } } }, { new: true })
+        res.send(true);
+    } catch (e) {
+        res.send(false)
+    }
+})
+
+// Here, We Handle Patch Request For Update News of University
+router.patch("/university/news/:idu/:idn", async (req, res) => {
+    try {
+        const _idu = req.params.idu
+        const _idn = req.params.idn
+        await University.updateOne({ _id: _idu, "University_News._id": _idn }, { $set: req.body }, { new: true })
+        res.send(true);
+    } catch (e) {
+        res.send(false);
     }
 })
 

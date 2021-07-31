@@ -17,6 +17,12 @@ const UniversitySchema = new mongoose.Schema({
             Course_Year: { type: Number, require: true },
             Year_Published: { type: Boolean, default: true }
         }]
+    }],
+    University_News: [{
+        News_Title: { type: String, require: true },
+        News_Url: { type: String, require: true },
+        News_Published: { type: Boolean, require: true },
+        News_Date: { type: String, default: Date, require: true }
     }]
 })
 
