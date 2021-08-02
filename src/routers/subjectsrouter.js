@@ -16,7 +16,7 @@ router.post("/subjects", async (req, res) => {
 // Here, We Handle Get Request For Subjects
 router.get("/subjects", async (req, res) => {
     try {
-        const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowAllSubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -27,7 +27,7 @@ router.get("/subjects", async (req, res) => {
 router.get("/subjects/name/:subjectname", async (req, res) => {
     try {
         const subjectname = req.params.subjectname
-        const ShowByNameSubjects = await Subjects.find({ Subject_Name: new RegExp(subjectname, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByNameSubjects = await Subjects.find({ Subject_Name: new RegExp(subjectname, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowByNameSubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -38,7 +38,7 @@ router.get("/subjects/name/:subjectname", async (req, res) => {
 router.get("/subjects/course/:subjectcourse", async (req, res) => {
     try {
         const subjectcourse = req.params.subjectcourse
-        const ShowByCourseSubjects = await Subjects.find({ Subject_Course: new RegExp(subjectcourse, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByCourseSubjects = await Subjects.find({ Subject_Course: new RegExp(subjectcourse, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowByCourseSubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -49,7 +49,7 @@ router.get("/subjects/course/:subjectcourse", async (req, res) => {
 router.get("/subjects/branch/:subjectbranch", async (req, res) => {
     try {
         const subjectbranch = req.params.subjectbranch
-        const ShowByBranchSubjects = await Subjects.find({ Subject_Branch: new RegExp(subjectbranch, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByBranchSubjects = await Subjects.find({ Subject_Branch: new RegExp(subjectbranch, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowByBranchSubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -60,7 +60,7 @@ router.get("/subjects/branch/:subjectbranch", async (req, res) => {
 router.get("/subjects/year/:subjectyear", async (req, res) => {
     try {
         const subjectyear = req.params.subjectyear
-        const ShowByYearSubjects = await Subjects.find({ Subject_Year: new RegExp(subjectyear, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByYearSubjects = await Subjects.find({ Subject_Year: new RegExp(subjectyear, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowByYearSubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -71,7 +71,7 @@ router.get("/subjects/year/:subjectyear", async (req, res) => {
 router.get("/subjects/university/:subjectuniversity", async (req, res) => {
     try {
         const subjectuniversity = req.params.subjectuniversity
-        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: new RegExp(subjectuniversity, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: new RegExp(subjectuniversity, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowByUniversitySubjects);
     } catch (e) {
         res.status(400).send(e);
@@ -154,7 +154,7 @@ router.delete("/subject/:id", async (req, res) => {
 router.get("/subject/:id", async (req, res) => {
     try {
         const _id = req.params.id
-        const ShowSubject = await Subjects.find({ _id: _id })
+        const ShowSubject = await Subjects.find({ _id: _id }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.send(ShowSubject);
     } catch (e) {
         res.send(e);
@@ -198,8 +198,19 @@ router.delete("/subjects/chapters/topics/:ids/:idc/:idt", async (req, res) => {
     }
 })
 
+// Get API For Getting Subjects According to the University (For Admin Panel)
+router.get("/subjects/university/:university", async (req, res) => {
+    try {
+        const university = req.params.university
+        const SelectedSubject = await Subjects.find({ Subject_University: university }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
+        res.json(SelectedSubject);
+    } catch (e) {
+        res.status(402).json(e)
+    }
+});
+
 // Here Now We Make Api For Mobile Enrollge App
-router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
+router.get("/subjects/:university/:course/:branch/:year", async (req, res) => {
     try {
         const course = req.params.course
         const university = req.params.university
@@ -212,7 +223,7 @@ router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
                 { Subject_Course: course },
                 { Subject_Year: year }
             ]
-        }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true })
+        }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published Chapters');
         res.json(SelectedSubject);
     } catch (e) {
         res.status(402).json(e)

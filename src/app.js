@@ -17,6 +17,7 @@ const feedbackrouter = require('./routers/feedbackrouter');
 const settings = require('./routers/settingsrouter');
 const university = require('./routers/universityrouter');
 const contactus = require('./routers/contactusrouter');
+const admindashboardrouter = require('./routers/admindashboardrouter');
 
 // For Using API in Another Domain
 app.use(cors());
@@ -39,6 +40,7 @@ app.use(feedbackrouter);
 app.use(settings);
 app.use(university);
 app.use(contactus);
+app.use(admindashboardrouter);
 
 // app.use(express.static(path.join(__dirname, 'build')));
 
