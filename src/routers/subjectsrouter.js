@@ -274,7 +274,7 @@ router.get("/subject/syllabus/:id", async (req, res) => {
 })
 
 // Routing For Deleting Syllabus Files in Subject
-router.patch("/subjects/syllabus/:id/delete", async (req, res) => {
+router.patch("/subjects/syllabus/delete/:id", async (req, res) => {
     try {
         const _id = req.params.id
         await Subjects.findByIdAndUpdate({ _id: _id }, {
@@ -290,5 +290,138 @@ router.patch("/subjects/syllabus/:id/delete", async (req, res) => {
     }
 });
 
+
+// Routing For Chapters Notes And Question Banks
+
+// Here, We Handle Patch Request For Update Chapter Notes of Subject
+router.patch("/subjects/chapters/notes/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        const { FileName, EncodedFile, FileType } = req.body
+        if (EncodedFile === null) {
+            res.send({ FileAdded: false, ErrorMsg: 'Please Select the Files' });
+        }
+
+        if (EncodedFile !== null && fileType.includes(FileType)) {
+            const EncodedNotesFile = new Buffer.from(EncodedFile, 'base64');
+            const EncodedFileType = FileType
+            await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
+                $set: {
+                    "Chapters.$.Chapter_Notes": {
+                        FileName: FileName,
+                        EncodedFile: EncodedNotesFile,
+                        FileType: EncodedFileType
+                    }
+                }
+            }, { new: true })
+            res.send({ FileAdded: true });
+        }
+    } catch (e) {
+        res.send({ FileAdded: false, ErrorMsg: e });
+        console.log(e)
+    }
+})
+
+// Here, We Handle Patch Request For Update Chapter Question Bank of Subject
+router.patch("/subjects/chapters/questionbank/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        const { FileName, EncodedFile, FileType } = req.body
+        if (EncodedFile === null) {
+            res.send({ FileAdded: false, ErrorMsg: 'Please Select the Files' });
+        }
+
+        if (EncodedFile !== null && fileType.includes(FileType)) {
+            const EncodedQuestionBankFile = new Buffer.from(EncodedFile, 'base64');
+            const EncodedFileType = FileType
+            await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
+                $set: {
+                    "Chapters.$.Chapter_QuestionBank": {
+                        FileName: FileName,
+                        EncodedFile: EncodedQuestionBankFile,
+                        FileType: EncodedFileType
+                    }
+                }
+            }, { new: true })
+            res.send({ FileAdded: true });
+        }
+    } catch (e) {
+        res.send({ FileAdded: false, ErrorMsg: e });
+    }
+})
+
+// Now We Handle Delete Request For Deleting Notes of Chapters
+router.patch("/subjects/chapters/notes/delete/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
+            $set: {
+                "Chapters.$.Chapter_Notes": {
+                    FileName: null,
+                    EncodedFile: null,
+                    FileType: null
+                }
+            }
+        }, { new: true })
+        res.send({ FileAdded: true });
+
+        res.send(true);
+    } catch (e) {
+        res.send(false);
+    }
+})
+
+// Now We Handle Delete Request For Deleting Question Bank of Chapters
+router.patch("/subjects/chapters/questionbank/delete/:ids/:idc", async (req, res) => {
+    try {
+        const _ids = req.params.ids
+        const _idc = req.params.idc
+        await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
+            $set: {
+                "Chapters.$.Chapter_QuestionBank": {
+                    FileName: null,
+                    EncodedFile: null,
+                    FileType: null
+                }
+            }
+        }, { new: true })
+        res.send({ FileAdded: true });
+
+        res.send(true);
+    } catch (e) {
+        res.send(false);
+    }
+})
+
+// Now We Handle Get Request For Individuals Notes of Chapter
+router.get("/subject/chapter/notes/:id/:chapterindex", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const chapterindex = req.params.chapterindex
+        const ShowSubject = await Subjects.find({ _id: _id }).select('Chapters');
+        const ShowChapter = await ShowSubject[0].Chapters[chapterindex]
+        const Chapter_Notes = await ShowChapter.Chapter_Notes
+        res.send({ FileName: Chapter_Notes.FileName, FileType: Chapter_Notes.FileType, EncodedFile: `data:${Chapter_Notes.FileType};base64,${Chapter_Notes.EncodedFile.toString('base64')}` });
+    } catch (e) {
+        res.send(e);
+    }
+})
+
+// Now We Handle Get Request For Individuals Question Bank of Chapter
+router.get("/subject/chapter/questionbank/:id/:chapterindex", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const chapterindex = req.params.chapterindex
+        const ShowSubject = await Subjects.find({ _id: _id }).select('Chapters');
+        const ShowChapter = await ShowSubject[0].Chapters[chapterindex]
+        const Chapter_QuestionBank = await ShowChapter.Chapter_QuestionBank
+        res.send({ FileName: Chapter_QuestionBank.FileName, FileType: Chapter_QuestionBank.FileType, EncodedFile: `data:${Chapter_QuestionBank.FileType};base64,${Chapter_QuestionBank.EncodedFile.toString('base64')}` });
+    } catch (e) {
+        res.send(e);
+    }
+})
 
 module.exports = router

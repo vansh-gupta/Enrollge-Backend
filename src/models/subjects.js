@@ -34,12 +34,38 @@ const SubjectsSchema = new mongoose.Schema({
         Syllabus_EncodedFile: { type: Buffer, require: true },
         Syllabus_FileType: { type: String, require: true }
     },
+    Subject_PreviousYearPapers: [{
+        PYQ_PaperName: { type: String, require: true },
+        PYQ_PaperFile: {
+            File_Name: { type: String, require: true },
+            Encoded_File: { type: Buffer, require: true },
+            Encoded_FileType: { type: String, require: true }
+        },
+        PYQ_PaperSolutions: [{
+            PYQ_SolutionName: { type: String, require: true },
+            PYQ_SolutionFile: {
+                File_Name: { type: String, require: true },
+                Encoded_File: { type: Buffer, require: true },
+                Encoded_FileType: { type: String, require: true }
+            }
+        }]
+    }],
     Chapters: [{
         Chapter_Name: { type: String, require: true },
         Chapter_Order: { type: String, require: true },
         Subject_Name: { type: String, require: true },
         Subject_Order: { type: String, require: true },
         Chapter_Published: { type: Boolean, default: true },
+        Chapter_Notes: {
+            FileName: { type: String, require: true },
+            EncodedFile: { type: Buffer, require: true },
+            FileType: { type: String, require: true }
+        },
+        Chapter_QuestionBank: {
+            FileName: { type: String, require: true },
+            EncodedFile: { type: Buffer, require: true },
+            FileType: { type: String, require: true }
+        },
         Topics: [{
             Topic_Name: { type: String, require: true },
             Topic_Order: { type: String, require: true },
