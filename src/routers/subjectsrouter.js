@@ -267,7 +267,7 @@ router.get("/subject/syllabus/:id", async (req, res) => {
         const _id = req.params.id
         const ShowSubjectSyllabus = await Subjects.find({ _id: _id }).select('Subject_Syllabus');
         const Syllabus = await ShowSubjectSyllabus[0].Subject_Syllabus
-        res.json({ Syllabus_FileName: Syllabus.Syllabus_FileName, Syllabus_FileType: Syllabus.Syllabus_FileType, Syllabus_File: `data:${Syllabus.Syllabus_FileType};charset-utf-8;base64,${Syllabus.Syllabus_EncodedFile.toString('base64')}` });
+        res.json({ Syllabus_FileName: Syllabus.Syllabus_FileName, Syllabus_FileType: Syllabus.Syllabus_FileType, Syllabus_File: `data:${Syllabus.Syllabus_FileType};base64,${Syllabus.Syllabus_EncodedFile.toString('base64')}` });
     } catch (e) {
         res.json(e);
     }
