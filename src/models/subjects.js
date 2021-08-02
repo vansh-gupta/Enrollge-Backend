@@ -29,6 +29,11 @@ const SubjectsSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    Subject_Syllabus: {
+        Syllabus_FileName: { type: String, require: true },
+        Syllabus_EncodedFile: { type: Buffer, require: true },
+        Syllabus_FileType: { type: String, require: true }
+    },
     Chapters: [{
         Chapter_Name: { type: String, require: true },
         Chapter_Order: { type: String, require: true },

@@ -3,6 +3,7 @@ dotenv.config({ path: `${__dirname}/config.env` });
 const cors = require("cors");
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
 // const path = require("path");
 require("../src/db/connection");
 const studentsrouter = require("./routers/studentsrouter");
@@ -17,10 +18,13 @@ const settings = require('./routers/settingsrouter');
 const university = require('./routers/universityrouter');
 const contactus = require('./routers/contactusrouter');
 
-
+// For Using API in Another Domain
 app.use(cors());
 app.use(cookieparser());
 
+// For Using High Limit in Uploading Images And PDF From Admin Panel
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 const PORT = process.env.PORT
 

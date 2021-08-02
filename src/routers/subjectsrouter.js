@@ -219,4 +219,65 @@ router.post("/subjects/:university/:course/:branch/:year", async (req, res) => {
     }
 });
 
+
+// API Routing for Syllabus of Subject in Admin Panel
+
+const fileType = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf']
+
+// Routing For Adding Syllabus Files in Subject
+router.patch("/subjects/syllabus/:id", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const { Syllabus_FileName, Syllabus_EncodedFile, Syllabus_FileType } = req.body
+        if (Syllabus_EncodedFile === null) {
+            res.send({ FileAdded: false, ErrorMsg: 'Please Select the Files' });
+        }
+
+        if (Syllabus_EncodedFile !== null && fileType.includes(Syllabus_FileType)) {
+            const EncodedFile = new Buffer.from(Syllabus_EncodedFile, 'base64');
+            const EncodedFileType = Syllabus_FileType
+            await Subjects.findByIdAndUpdate({ _id: _id }, {
+                Subject_Syllabus: {
+                    Syllabus_FileName: Syllabus_FileName,
+                    Syllabus_EncodedFile: EncodedFile,
+                    Syllabus_FileType: EncodedFileType
+                }
+            }, { new: true });
+            res.send({ FileAdded: true });
+        }
+    } catch (e) {
+        res.send({ FileAdded: false, ErrorMsg: e });
+    }
+});
+
+// Now We Handle Get Request For Subjects's Syllabus
+router.get("/subject/syllabus/:id", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const ShowSubjectSyllabus = await Subjects.find({ _id: _id }).select('Subject_Syllabus');
+        const Syllabus = await ShowSubjectSyllabus[0].Subject_Syllabus
+        res.json({ Syllabus_FileName: Syllabus.Syllabus_FileName, Syllabus_FileType: Syllabus.Syllabus_FileType, Syllabus_File: `data:${Syllabus.Syllabus_FileType};charset-utf-8;base64,${Syllabus.Syllabus_EncodedFile.toString('base64')}` });
+    } catch (e) {
+        res.json(e);
+    }
+})
+
+// Routing For Deleting Syllabus Files in Subject
+router.patch("/subjects/syllabus/:id/delete", async (req, res) => {
+    try {
+        const _id = req.params.id
+        await Subjects.findByIdAndUpdate({ _id: _id }, {
+            Subject_Syllabus: {
+                Syllabus_FileName: null,
+                Syllabus_EncodedFile: null,
+                Syllabus_FileType: null
+            }
+        }, { new: true });
+        res.send(true);
+    } catch (e) {
+        res.send(false);
+    }
+});
+
+
 module.exports = router
