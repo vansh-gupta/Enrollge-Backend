@@ -366,8 +366,6 @@ router.patch("/subjects/chapters/notes/delete/:ids/:idc", async (req, res) => {
                 }
             }
         }, { new: true })
-        res.send({ FileAdded: true });
-
         res.send(true);
     } catch (e) {
         res.send(false);
@@ -388,8 +386,6 @@ router.patch("/subjects/chapters/questionbank/delete/:ids/:idc", async (req, res
                 }
             }
         }, { new: true })
-        res.send({ FileAdded: true });
-
         res.send(true);
     } catch (e) {
         res.send(false);

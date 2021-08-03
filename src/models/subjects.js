@@ -36,6 +36,7 @@ const SubjectsSchema = new mongoose.Schema({
     },
     Subject_PreviousYearPapers: [{
         PYQ_PaperName: { type: String, require: true },
+        PYQ_PaperOrder: { type: Number, require: true },
         PYQ_PaperFile: {
             File_Name: { type: String, require: true },
             Encoded_File: { type: Buffer, require: true },
