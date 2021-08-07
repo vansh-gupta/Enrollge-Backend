@@ -1,50 +1,42 @@
 const express = require("express");
 const router = new express.Router();
-const Admin = require("../models/admin");
+const Admin = require("../../models/admin");
 const bcrypt = require("bcryptjs");
 
 
-// First Handle Post Request to Create Admin in the Admin Portal
-router.post("/admin/register", async (req, res) => {
+// Handle POST Request, to Create Admin Panel's Account for the Admin Portal
+router.post("/admin/account/register", async (req, res) => {
     try {
         const { email_address, password, cpassword } = req.body;
-
-        if (!email_address || !password || !cpassword) {
-            return (res.status(422).json({ error: "Please fill the Details Properly" }))
-        }
 
         const AdminExist = await Admin.findOne({ email_address: email_address })
 
         if (AdminExist) {
-            return (res.send("AdminExist"));
+            return (res.send({ error: `An account with Email ${email_address} already exists.` }));
         }
         if (password != cpassword) {
-            return (res.status(422).json({ error: "Please Enter Same Password" }))
+            return (res.send({ error: "Please enter the same password" }));
         }
 
         const AddAdmin = new Admin({ email_address, password, cpassword });
         // Here We Use Pre Function in AdminSchema to hash the Password
         await AddAdmin.save();
 
-        res.send(true)
+        res.send('OK');
     } catch (e) {
-        res.send(false)
+        res.send({ error: e });
     }
 })
 
-// Now, Here We Create a Api For Login Admin Panel
-router.post("/admin/login", async (req, res) => {
+// Handle POST Request, For Login Admin Panel's Account
+router.post("/admin/account/login", async (req, res) => {
     try {
         const { email_address, password } = req.body;
-
-        if (!email_address || !password) {
-            return (res.status(402).json({ error: "Please fill the Details Properly" }))
-        }
 
         const AdminExist = await Admin.findOne({ email_address: email_address })
 
         if (!AdminExist) {
-            res.send(false)
+            res.send({ error: `There's no Enrollge Account with the info you provided.` });
         }
 
         const isMatch = await bcrypt.compare(password, AdminExist.password);
@@ -52,23 +44,18 @@ router.post("/admin/login", async (req, res) => {
         const token = await AdminExist.generateAuthToken();
 
         if (!isMatch) {
-            res.json({ "Login": false })
+            res.send({ error: 'Please enter correct email address and password.' })
         } else {
-            res.cookie("jwtadmin", token, {
-                expires: new Date(Date.now() + 86400000),
-                httpOnly: true,
-                secure: false
-            });
-            res.status(201).json({ "Login": true, "Token": token });
+            res.status(201).send({ "Login": 'OK', "Token": token });
         }
 
     } catch (e) {
-        res.status(422).send(e);
+        res.status(422).send({ error: e });
     }
 })
 
-// Now We Handle Post Request For Changing Password of Admin Panel 
-router.post('/admin/resetpassword', async (req, res) => {
+// Handle Post Request, For Changing Password of Admin Panel's Account
+router.post('/admin/account/resetpassword', async (req, res) => {
     try {
         const email_address = req.query.gmail
         const { Password, CPassword } = req.body
@@ -76,23 +63,23 @@ router.post('/admin/resetpassword', async (req, res) => {
             const HashPassword = await bcrypt.hash(Password, 12);
             const HashCPassword = await bcrypt.hash(CPassword, 12);
             await Admin.findOneAndUpdate({ email_address: new RegExp(email_address, 'i') }, { Password: HashPassword, CPassword: HashCPassword }, { new: true });
-            res.status(200).send({ PasswordChange: true });
+            res.status(200).send({ PasswordChange: 'OK' });
         } else {
-            res.status(422).send("Please Enter the Same Password");
+            res.status(422).send({ error: "Please enter the same password" });
         }
     } catch (error) {
-        res.status(401).send({ PasswordChange: false });
+        res.status(401).send({ error: error });
     }
 })
 
-//  Here We Handle the Api to get last element of array
-router.post('/admin/token/:email', async (req, res) => {
+// Handle POST Request, to get last element (Token) of array
+router.post('/admin/account/token/:email', async (req, res) => {
     try {
         const email = req.params.email
         const token = await Admin.find({ email_address: email }, { 'tokens': { $slice: -1 } })
         res.send(token)
     } catch (e) {
-        res.send(e)
+        res.send({ error: e })
     }
 
 })

@@ -7,15 +7,12 @@ const authServer = (req, res, next) => {
     if (typeof bearerHeader !== 'undefined') {
         // Split Bearer Token
         const bearer = bearerHeader.split(' ')[1]
-        // Verfiy JWT Token
-        jwt.verify(bearer, process.env.SECRETKEY, (err, authData) => {
-            if (err) {
-                res.sendStatus(403);
-            } else {
-                console.log(authData)
-                next();
-            }
-        });
+        // Verify API Token
+        if (bearer == process.env.API_TOKEN) {
+            next();
+        } else {
+            res.status(403).send("Authentication Error");
+        }
     } else {
         // Forbidden
         res.sendStatus(403);

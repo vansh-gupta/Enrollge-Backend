@@ -1,11 +1,11 @@
 const express = require('express');
 const router = new express.Router();
-const Students = require("../models/students");
-const Subjects = require("../models/subjects");
-const Courses = require("../models/courses");
+const Students = require("../../models/students");
+const Subjects = require("../../models/subjects");
+const Courses = require("../../models/courses");
 
-// API For Counting Total Numbers of Documents
-router.get('/enrollge/total', async (req, res) => {
+// Handling GET Request, For Counting Total Numbers of Documents
+router.get('/admin/enrollge/total', async (req, res) => {
     try {
         const NumberOfStudents = await Students.countDocuments();
         const NumberOfSubjects = await Subjects.countDocuments();
@@ -18,7 +18,7 @@ router.get('/enrollge/total', async (req, res) => {
         }
         res.json({ NumberOfStudents, NumberOfSubjects, NumberOfCourses, NumberOfChapters });
     } catch (errror) {
-        res.json(error);
+        res.json({ error: error.message });
     }
 })
 

@@ -4,52 +4,70 @@ const cors = require("cors");
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
-// const path = require("path");
 require("../src/db/connection");
-const studentsrouter = require("./routers/studentsrouter");
-const subjectsrouter = require("./routers/subjectsrouter");
-const coursesrouter = require("./routers/coursesrouter");
-const adminrouter = require("./routers/adminrouter");
 const cookieparser = require("cookie-parser");
-const reportsrouter = require('./routers/reportsrouter');
-const coursestypesrouter = require('./routers/coursestypesrouter');
-const feedbackrouter = require('./routers/feedbackrouter');
-const settings = require('./routers/settingsrouter');
-const university = require('./routers/universityrouter');
-const contactus = require('./routers/contactusrouter');
-const admindashboardrouter = require('./routers/admindashboardrouter');
-const subjectspreviousyearpapers = require('./routers/subjectspreviousyearpapersrouter');
+const fileUpload = require('express-fileupload');
+const helmet = require("helmet");
+const authServer = require('./middleware/authServer');
+// For Admin Panel
+const adminUniversityNews = require('./routers/adminRouters/universityNews');
+const adminChapterNotesAndQuestionBank = require('./routers/adminRouters/chapterNotesAndQuestionBank');
+const adminAuth = require('./routers/adminRouters/adminAuth');
+const adminSubjects = require('./routers/adminRouters/subjects');
+const adminCourses = require('./routers/adminRouters/courses');
+const adminReports = require('./routers/adminRouters/reports');
+const adminCoursesTypes = require('./routers/adminRouters/courseTypes');
+const adminFeedback = require('./routers/adminRouters/feedback');
+const adminSettings = require('./routers/adminRouters/settings');
+const adminUniversity = require('./routers/adminRouters/university');
+const adminDashboard = require('./routers/adminRouters/dashboard');
+const adminPreviousYearPaper = require('./routers/adminRouters/subjectpreviousyearpapers');
+// For Mobile API
+const appCourses = require('./routers/appRouters/courses');
+const appUniversity = require('./routers/appRouters/university');
+const appSubjects = require('./routers/appRouters/subjects');
+const appStudentsAuth = require('./routers/appRouters/studentsAuth');
+// For Website API
+const webContactUs = require('./routers/webRouters/contactUs');
 
-// For Using API in Another Domain
+const PORT = process.env.PORT
+
+
+// Middelwares
 app.use(cors());
 app.use(cookieparser());
+app.use(express.json());
+app.use(fileUpload());
+app.use(helmet());
+app.use(authServer);
 
 // For Using High Limit in Uploading Images And PDF From Admin Panel
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
-const PORT = process.env.PORT
 
-app.use(express.json());
-app.use(studentsrouter);
-app.use(subjectsrouter);
-app.use(coursesrouter);
-app.use(adminrouter);
-app.use(reportsrouter);
-app.use(coursestypesrouter);
-app.use(feedbackrouter);
-app.use(settings);
-app.use(university);
-app.use(contactus);
-app.use(admindashboardrouter);
-app.use(subjectspreviousyearpapers);
+// For Admin Panel
+app.use(adminUniversityNews);
+app.use(adminChapterNotesAndQuestionBank);
+app.use(adminAuth);
+app.use(adminSubjects);
+app.use(adminCourses);
+app.use(adminReports);
+app.use(adminCoursesTypes);
+app.use(adminFeedback);
+app.use(adminSettings);
+app.use(adminUniversity);
+app.use(adminDashboard);
+app.use(adminPreviousYearPaper);
 
-// app.use(express.static(path.join(__dirname, 'build')));
+// For Mobile APP
+app.use(appCourses);
+app.use(appUniversity);
+app.use(appSubjects);
+app.use(appStudentsAuth);
 
-// // Add Frontend Work From React Js
-// app.get("/", async (req, res) => {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+// For Website
+app.use(webContactUs);
 
 app.listen(PORT, () => {
     console.log(`Connection is Live at Port No. ${PORT}`);

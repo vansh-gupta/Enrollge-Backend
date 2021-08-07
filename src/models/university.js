@@ -27,6 +27,6 @@ const UniversitySchema = new mongoose.Schema({
 })
 
 // Here, We Are Creating And Collection in MOongoDB of University
-const University = new mongoose.model("UniversityName", UniversitySchema)
+const University = new mongoose.model("University", UniversitySchema)
 
 module.exports = University
