@@ -182,14 +182,14 @@ router.patch('/admin/subject/pyqp/file/delete/:ids/:idp', async (req, res) => {
 });
 
 // Handle Delete Request, For Deleting Subject's Previous Year Paper
-router.delete("/admin/subject/previousyearpaper/delete/:ids/:idp", async (req, res) => {
+router.delete("/admin/subject/previousyearpaper/delete/:ids/:idp/:pyquuid", async (req, res) => {
     try {
         const _ids = req.params.ids
         const _idp = req.params.idp
-        const { PYQ_UUID } = req.body
+        const pyquuid = req.params.pyquuid
         const SelectedSubjects = await Subjects.find({ _id: _ids }).select('Subject_PreviousYearPapers');
         const SubjectPYP = await SelectedSubjects[0].Subject_PreviousYearPapers
-        const selectedPYP = await SubjectPYP.find(item => item.PYQ_UUID === PYQ_UUID);
+        const selectedPYP = await SubjectPYP.find(item => item.PYQ_UUID === pyquuid);
         const PYPFileName = await selectedPYP.PYQ_PaperFile.FileName
 
         if (PYPFileName !== null && typeof PYPFileName !== "undefined") {
@@ -207,6 +207,7 @@ router.delete("/admin/subject/previousyearpaper/delete/:ids/:idp", async (req, r
             res.send({ FileDeleted: false, ErrorMsg: "Please Upload the PYQP File First" });
         }
     } catch (e) {
+        console.log(e)
         res.send({ FileDeleted: false, ErrorMsg: e.message });
     }
 })
@@ -289,12 +290,13 @@ router.put("/admin/subjects/pyqp/pyqps/add/:ids/:idp", async (req, res) => {
 })
 
 // Handle Delete Request, For Deleting PYQP Solutions
-router.delete("/admin/subjects/pyqp/pyqps/delete/:ids/:idp/:idps", async (req, res) => {
+router.delete("/admin/subjects/pyqp/pyqps/delete/:ids/:idp/:idps/:pyqpsindex/:pyqpsuuid", async (req, res) => {
     try {
         const _ids = req.params.ids
         const _idp = req.params.idp
         const _idps = req.params.idps
-        const { PYQPSindex, PYQ_UUID } = req.body
+        const PYQPSindex = req.params.pyqpsindex
+        const PYQ_UUID = req.params.pyqpsuuid
         const SelectedSubjects = await Subjects.find({ _id: _ids }).select('Subject_PreviousYearPapers');
         const SubjectPYP = await SelectedSubjects[0].Subject_PreviousYearPapers
         const selectedPYP = await SubjectPYP.find(item => item.PYQ_UUID === PYQ_UUID);
@@ -306,7 +308,7 @@ router.delete("/admin/subjects/pyqp/pyqps/delete/:ids/:idp/:idps", async (req, r
         const fileDeleted = await containerClient.deleteBlob(blobName);
         if (fileDeleted) {
             // Deleting From Database
-            await Subjects.update({ "_id": _ids, "Subject_PreviousYearPapers._id": _idp }, { $pull: { "Subject_PreviousYearPapers.$.PYQ_PaperSolutions": { "_id": _idps } } }, { new: true });
+            await Subjects.updateOne({ "_id": _ids, "Subject_PreviousYearPapers._id": _idp }, { $pull: { "Subject_PreviousYearPapers.$.PYQ_PaperSolutions": { "_id": _idps } } }, { new: true });
             res.send({ PYQPSDeleted: true })
         }
     } catch (e) {

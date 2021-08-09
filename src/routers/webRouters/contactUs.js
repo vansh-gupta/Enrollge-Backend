@@ -30,7 +30,7 @@ router.get("/admin/contactus", async (req, res) => {
 })
 
 //  Handling DELETE Request, to delete contact us Info from database
-router.delete('/admin/contactus/:id', async (req, res) => {
+router.delete('/admin/contactus/delete/:id', async (req, res) => {
     try {
         const _id = req.params.id
         await ContactUs.findByIdAndDelete({ _id: _id });

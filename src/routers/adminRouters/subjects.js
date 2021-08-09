@@ -26,6 +26,31 @@ router.get("/admin/subjects", async (req, res) => {
     }
 });
 
+// Handle Get Request, For Getting Subject of All Chapters
+router.get("/admin/subject/chapters/:id", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const ShowSubject = await Subjects.find({ _id: _id }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const Chapters = await ShowSubject[0].Chapters
+        res.send(Chapters);
+    } catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+
+// Handle Get Request, For Getting Subject of Chapter of All Topics
+router.get("/admin/subject/chapter/topics/:id/:chapterindex", async (req, res) => {
+    try {
+        const _id = req.params.id
+        const chapterindex = req.params.chapterindex
+        const ShowSubject = await Subjects.find({ _id: _id }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const Topics = await ShowSubject[0].Chapters[chapterindex].Topics
+        res.send(Topics);
+    } catch (e) {
+        res.status(400).send({ error: e.message });
+    }
+});
+
 // Handle GET Request, For Searching Subjects By Name
 router.get("/admin/subjects/name/:subjectname", async (req, res) => {
     try {
