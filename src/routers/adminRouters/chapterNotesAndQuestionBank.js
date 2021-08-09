@@ -34,7 +34,9 @@ router.patch("/admin/subject/chapter/notes/update/:ids/:idc", async (req, res) =
                         $set: {
                             "Chapters.$.Chapter_Notes": {
                                 FileName: blobName,
-                                FileUrl: blockBlobClient.url
+                                FileType: file.mimetype,
+                                FileUrl: blockBlobClient.url,
+                                FileContainerName: containerName
                             }
                         }
                     }, { new: true })
@@ -78,7 +80,9 @@ router.patch("/admin/subject/chapter/questionbank/update/:ids/:idc", async (req,
                         $set: {
                             "Chapters.$.Chapter_QuestionBank": {
                                 FileName: blobName,
-                                FileUrl: blockBlobClient.url
+                                FileType: file.mimetype,
+                                FileUrl: blockBlobClient.url,
+                                FileContainerName: containerName
                             }
                         }
                     }, { new: true })
@@ -118,7 +122,9 @@ router.patch("/admin/subject/chapter/notes/delete/:ids/:idc", async (req, res) =
                     $set: {
                         "Chapters.$.Chapter_Notes": {
                             FileName: null,
-                            FileUrl: null
+                            FileType: null,
+                            FileUrl: null,
+                            FileContainerName: null
                         }
                     }
                 }, { new: true });
@@ -155,7 +161,9 @@ router.patch("/admin/subject/chapter/questionbank/delete/:ids/:idc", async (req,
                     $set: {
                         "Chapters.$.Chapter_QuestionBank": {
                             FileName: null,
-                            FileUrl: null
+                            FileType: null,
+                            FileUrl: null,
+                            FileContainerName: null
                         }
                     }
                 }, { new: true });

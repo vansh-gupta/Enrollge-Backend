@@ -31,7 +31,9 @@ const SubjectsSchema = new mongoose.Schema({
     },
     Subject_Syllabus: {
         FileName: { type: String, require: true },
+        FileType: { type: String, require: true },
         FileUrl: { type: String, require: true },
+        FileContainerName: { type: String, require: true }
     },
     Subject_PreviousYearPapers: [{
         PYQ_PaperName: { type: String, require: true },
@@ -39,13 +41,17 @@ const SubjectsSchema = new mongoose.Schema({
         PYQ_UUID: { type: String, require: true },
         PYQ_PaperFile: {
             FileName: { type: String, require: true },
-            FileUrl: { type: String, require: true }
+            FileType: { type: String, require: true },
+            FileUrl: { type: String, require: true },
+            FileContainerName: { type: String, require: true }
         },
         PYQ_PaperSolutions: [{
             PYQ_SolutionName: { type: String, require: true },
             PYQ_SolutionFile: {
                 FileName: { type: String, require: true },
-                FileUrl: { type: String, require: true }
+                FileType: { type: String, require: true },
+                FileUrl: { type: String, require: true },
+                FileContainerName: { type: String, require: true }
             }
         }]
     }],
@@ -57,11 +63,15 @@ const SubjectsSchema = new mongoose.Schema({
         Chapter_Published: { type: Boolean, default: true },
         Chapter_Notes: {
             FileName: { type: String, require: true },
-            FileUrl: { type: String, require: true }
+            FileType: { type: String, require: true },
+            FileUrl: { type: String, require: true },
+            FileContainerName: { type: String, require: true }
         },
         Chapter_QuestionBank: {
             FileName: { type: String, require: true },
-            FileUrl: { type: String, require: true }
+            FileType: { type: String, require: true },
+            FileUrl: { type: String, require: true },
+            FileContainerName: { type: String, require: true }
         },
         Topics: [{
             Topic_Name: { type: String, require: true },

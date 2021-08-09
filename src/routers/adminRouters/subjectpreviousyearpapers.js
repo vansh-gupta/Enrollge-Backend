@@ -35,7 +35,9 @@ router.patch('/admin/subject/previousyearpaper/add/:id', async (req, res) => {
                             PYQ_UUID: uuidv4(),
                             PYQ_PaperFile: {
                                 FileName: blobName,
-                                FileUrl: blockBlobClient.url
+                                FileType: file.mimetype,
+                                FileUrl: blockBlobClient.url,
+                                FileContainerName: containerName
                             }
                         }
                     }
@@ -89,7 +91,9 @@ router.patch('/admin/subject/pyqp/update/withfile/:ids/:idp', async (req, res) =
                                 "Subject_PreviousYearPapers.$.PYQ_PaperOrder": PYQ_PaperOrder,
                                 "Subject_PreviousYearPapers.$.PYQ_PaperFile": {
                                     FileName: blobName,
-                                    FileUrl: blockBlobClient.url
+                                    FileType: file.mimetype,
+                                    FileUrl: blockBlobClient.url,
+                                    FileContainerName: containerName
                                 }
                             }
                         }, { new: true });
@@ -113,7 +117,9 @@ router.patch('/admin/subject/pyqp/update/withfile/:ids/:idp', async (req, res) =
                             "Subject_PreviousYearPapers.$.PYQ_PaperOrder": PYQ_PaperOrder,
                             "Subject_PreviousYearPapers.$.PYQ_PaperFile": {
                                 FileName: blobName,
-                                FileUrl: blockBlobClient.url
+                                FileType: file.mimetype,
+                                FileUrl: blockBlobClient.url,
+                                FileContainerName: containerName
                             }
                         }
                     }, { new: true });
@@ -167,7 +173,9 @@ router.patch('/admin/subject/pyqp/file/delete/:ids/:idp', async (req, res) => {
                     $set: {
                         "Subject_PreviousYearPapers.$.PYQ_PaperFile": {
                             FileName: null,
-                            FileUrl: null
+                            FileType: null,
+                            FileUrl: null,
+                            FileContainerName: null
                         }
                     }
                 }, { new: true })
@@ -193,7 +201,7 @@ router.delete("/admin/subject/previousyearpaper/delete/:ids/:idp/:pyquuid", asyn
         const PYPFileName = await selectedPYP.PYQ_PaperFile.FileName
 
         if (PYPFileName !== null && typeof PYPFileName !== "undefined") {
-            // Deleting From Microsoft Azure Blob Storage
+            // Deleting File From Microsoft Azure Blob Storage
             const blobName = await PYPFileName
             const containerName = `${blobName.split('-')[1]}PreviousYearPaper`
             const containerClient = await blobServiceClient.getContainerClient(containerName);
@@ -274,7 +282,9 @@ router.put("/admin/subjects/pyqp/pyqps/add/:ids/:idp", async (req, res) => {
                             PYQ_SolutionName: PYQ_SolutionName,
                             PYQ_SolutionFile: {
                                 FileName: blobName,
-                                FileUrl: blockBlobClient.url
+                                FileType: file.mimetype,
+                                FileUrl: blockBlobClient.url,
+                                FileContainerName: containerName
                             }
                         }
                     }
