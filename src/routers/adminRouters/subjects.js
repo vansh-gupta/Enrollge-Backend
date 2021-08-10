@@ -237,7 +237,9 @@ router.patch("/admin/subjects/syllabus/update/:id", async (req, res) => {
                     await Subjects.findByIdAndUpdate({ _id: _id }, {
                         Subject_Syllabus: {
                             FileName: blobName,
-                            FileUrl: blockBlobClient.url
+                            FileType: file.mimetype,
+                            FileUrl: blockBlobClient.url,
+                            FileContainerName: containerName
                         }
                     }, { new: true });
                     res.send({ FileAdded: true });
@@ -280,7 +282,9 @@ router.patch("/admin/subjects/syllabus/delete/:id", async (req, res) => {
                 await Subjects.findByIdAndUpdate({ _id: _id }, {
                     Subject_Syllabus: {
                         FileName: null,
-                        FileUrl: null
+                        FileType: null,
+                        FileUrl: null,
+                        FileContainerName: null
                     }
                 }, { new: true });
                 res.send({ FileDeleted: true });
