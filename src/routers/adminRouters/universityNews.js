@@ -48,4 +48,28 @@ router.patch("/admin/university/news/update/:idu/:idn", async (req, res) => {
     }
 })
 
+
+
+
+
+
+// (********************************) Handle API for University News for Mobile APP (********************************)
+
+
+
+
+
+
+// Handle GET Request, For Getting Uiversity News
+router.get("/app/university/news/:universityname", async (req, res) => {
+    try {
+        const universityname = req.params.universityname
+        const ShowUniversityNews = await University.find({ University_Name: new RegExp(universityname, 'i') }).select('University_News');
+        res.status(200).json(ShowUniversityNews);
+    } catch (e) {
+        res.status(402).json({ error: e.message });
+    }
+});
+
+
 module.exports = router
