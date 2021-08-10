@@ -34,4 +34,23 @@ router.patch('/admin/settings/update/:id', async (req, res) => {
     }
 })
 
+
+
+
+// (********************************) Handle API for Settings for Mobile APP (********************************)
+
+
+
+
+// Handle GET Request, For Getting Settings Data
+router.get('/app/settings', async (req, res) => {
+    try {
+        const SettingsData = await Settings.find({})
+        res.status(201).json(SettingsData);
+    } catch (error) {
+        res.status(402).json({ error: error.message });
+    }
+})
+
+
 module.exports = router;
