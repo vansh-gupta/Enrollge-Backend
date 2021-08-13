@@ -64,15 +64,9 @@ router.patch("/admin/university/news/update/:idu/:idn", async (req, res) => {
 router.get("/app/university/news/:universityname", async (req, res) => {
     try {
         const universityname = req.params.universityname
-        const page = req.query.page
-        const limit = 25
         const ShowUniversityNews = await University.find({ University_Name: new RegExp(universityname, 'i') }).select('University_News');
         const UniversityNews = await ShowUniversityNews[0].University_News.reverse();
-        //Get Current News
-        const indexOfLastNews = page * limit;
-        const indexOfFirstNews = indexOfLastNews - limit;
-        const currentNews = UniversityNews.slice(indexOfFirstNews, indexOfLastNews);
-        res.status(200).json(currentNews);
+        res.status(200).json(UniversityNews);
     } catch (e) {
         res.status(402).json({ error: e.message });
     }
