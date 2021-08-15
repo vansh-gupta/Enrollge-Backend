@@ -231,7 +231,8 @@ router.patch("/admin/subjects/syllabus/update/:id", async (req, res) => {
                 const containerClient = await blobServiceClient.getContainerClient(containerName);
                 const blobName = `${Subject_University}-${Subject_Course}-${Subject_Branch.toString()}-${Subject_Year}-${Subject_Name}-${file.name}`
                 const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                await blockBlobClient.upload(file.data, file.data.length);
+                const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                 // Updating Data in Database
                 if (blockBlobClient.url) {
                     await Subjects.findByIdAndUpdate({ _id: _id }, {

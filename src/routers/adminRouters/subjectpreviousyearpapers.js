@@ -24,7 +24,8 @@ router.patch('/admin/subject/previousyearpaper/add/:id', async (req, res) => {
             const containerClient = await blobServiceClient.getContainerClient(containerName);
             const blobName = `${Subject_University}-${Subject_Course.toString()}-${Subject_Branch}-${Subject_Year}-${Subject_Name}-${PYQ_PaperName}-${file.name}`
             const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-            await blockBlobClient.upload(file.data, file.data.length);
+            const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+            await blockBlobClient.upload(file.data, file.data.length, blobOptions);
             // Updating Data in Database
             if (blockBlobClient.url) {
                 await Subjects.updateOne({ _id: _id }, {
@@ -82,7 +83,8 @@ router.patch('/admin/subject/pyqp/update/withfile/:ids/:idp', async (req, res) =
                     const containerClient = await blobServiceClient.getContainerClient(containerName);
                     const blobName = `${Subject_University}-${Subject_Course.toString()}-${Subject_Branch}-${Subject_Year}-${Subject_Name}-${PYQ_PaperName}-${file.name}`
                     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                    await blockBlobClient.upload(file.data, file.data.length);
+                    const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                    await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                     // Updating Data in Database
                     if (blockBlobClient.url) {
                         await Subjects.updateOne({ _id: _ids, "Subject_PreviousYearPapers._id": _idp }, {
@@ -108,7 +110,8 @@ router.patch('/admin/subject/pyqp/update/withfile/:ids/:idp', async (req, res) =
                 const containerClient = await blobServiceClient.getContainerClient(containerName);
                 const blobName = `${Subject_University}-${Subject_Course.toString()}-${Subject_Branch}-${Subject_Year}-${Subject_Name}-${PYQ_PaperName}-${file.name}`
                 const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                await blockBlobClient.upload(file.data, file.data.length);
+                const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                 // Updating Data in Database
                 if (blockBlobClient.url) {
                     await Subjects.updateOne({ _id: _ids, "Subject_PreviousYearPapers._id": _idp }, {
@@ -272,7 +275,8 @@ router.put("/admin/subjects/pyqp/pyqps/add/:ids/:idp", async (req, res) => {
             const containerClient = await blobServiceClient.getContainerClient(containerName);
             const blobName = `${Subject_University}-${Subject_Course.toString()}-${Subject_Branch}-${Subject_Year}-${Subject_Name}-${PYQ_SolutionName}-${file.name}`
             const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-            await blockBlobClient.upload(file.data, file.data.length);
+            const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+            await blockBlobClient.upload(file.data, file.data.length, blobOptions);
             // Updating Data in Database
             if (blockBlobClient.url) {
                 // Here First We Have to Find the Object by id And Then Find The Array Of Object With that Id And Push it Using Push Method

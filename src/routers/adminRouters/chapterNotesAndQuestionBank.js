@@ -27,7 +27,8 @@ router.patch("/admin/subject/chapter/notes/update/:ids/:idc", async (req, res) =
                 const containerClient = await blobServiceClient.getContainerClient(containerName);
                 const blobName = `${Subject_University}-${Subject_Course.toString()}-${Subject_Branch}-${Subject_Year}-${Subject_Name}-${ChapterName}-${file.name}`
                 const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                await blockBlobClient.upload(file.data, file.data.length);
+                const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                 // Updating Data in Database
                 if (blockBlobClient.url) {
                     await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
@@ -73,7 +74,8 @@ router.patch("/admin/subject/chapter/questionbank/update/:ids/:idc", async (req,
                 const containerClient = await blobServiceClient.getContainerClient(containerName);
                 const blobName = `${Subject_University}-${Subject_Course}-${Subject_Branch.toString()}-${Subject_Year}-${Subject_Name}-${ChapterName}-${file.name}`
                 const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                await blockBlobClient.upload(file.data, file.data.length);
+                const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                 // Updating Data in Database
                 if (blockBlobClient.url) {
                     await Subjects.updateOne({ _id: _ids, "Chapters._id": _idc }, {
