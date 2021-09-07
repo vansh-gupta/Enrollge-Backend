@@ -23,10 +23,10 @@ router.post("/app/student/account/register", async (req, res) => {
 
         // Here Use Middle Ware of Bcrypt js 
         await AddStudent.save();
-        res.status(201).json(true)
+        res.status(201).json({ AccountCreated: true });
 
     } catch (e) {
-        res.status(400).send(e);
+        res.status(400).json({ error: e.message, AccountCreated: false });
     }
 });
 
@@ -47,7 +47,7 @@ router.post("/app/student/account/login", async (req, res) => {
         }
 
     } catch (e) {
-        res.status(401).send(e);
+        res.status(401).send({ error: e.message });
     }
 });
 
@@ -65,7 +65,7 @@ router.post('/app/students/account/resetpassword', async (req, res) => {
             res.status(422).json({ error: "Please enter the same password" });
         }
     } catch (error) {
-        res.status(401).json({ error: error });
+        res.status(401).json({ error: error.message });
     }
 });
 
@@ -74,9 +74,9 @@ router.patch("/app/student/account/update/:id", async (req, res) => {
     try {
         const _id = req.params.id
         await Students.findByIdAndUpdate({ _id: _id }, req.body, { new: true })
-        res.json(true);
+        res.json({ AccountUpdated: true });
     } catch (e) {
-        res.status(500).json(false);
+        res.status(500).json({ error: e.message, AccountUpdated: false });
     }
 });
 
@@ -88,7 +88,7 @@ router.get("/app/student/account/:token", async (req, res) => {
         const GetStudent = await Students.findOne({ _id: VerifyStudent._id }).select('Full_Name Course Branch Year Gmail_Id Mobile_No University_Name');
         res.send(GetStudent);
     } catch (e) {
-        res.status(400).send(e);
+        res.status(400).json({ error: e.message });
     }
 });
 
@@ -103,7 +103,7 @@ router.get('/app/student/account/checkgmail/:gmail', async (req, res) => {
             res.json({ EmailExist: false });
         }
     } catch (error) {
-        res.status(400).json({ error: false });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -118,7 +118,19 @@ router.get('/app/student/account/checknumber/:number', async (req, res) => {
             res.json({ NumberExist: false });
         }
     } catch (error) {
-        res.status(400).json({ error: false });
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Handle GET Request, For Getting Email Address from Student Mobile Number
+router.get('/app/student/account/getemail/:number', async (req, res) => {
+    try {
+        const number = req.params.number
+        const CheckNumber = await Students.find({ Mobile_No: new RegExp(number, 'i') }).select('Gmail_Id');
+        const StudentEmailAdrress = await CheckNumber[0].Gmail_Id
+        res.json(StudentEmailAdrress);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -130,7 +142,7 @@ router.get('/app/email/validate', async (req, res) => {
         const { wellFormed, validDomain, validMailbox } = await emailValidator.verify(email);
         res.json({ wellFormed: wellFormed, validDomain: validDomain, validMailbox: validMailbox })
     } catch (error) {
-        res.status(400).json({ error: false });
+        res.status(400).json({ error: error.message });
     }
 })
 

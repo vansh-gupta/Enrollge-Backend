@@ -33,7 +33,7 @@ const webContactUs = require('./routers/webRouters/contactUs');
 const PORT = process.env.PORT
 
 let corsOptions = {
-    origin: ['https://enrollge.tk', 'https://enrollge.ml'],
+    origin: ['https://enrollge.tk', 'http://enrollge.ml', 'https://enrollge.tech'],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 

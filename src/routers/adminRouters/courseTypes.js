@@ -13,6 +13,16 @@ router.post("/admin/courses/coursetype/add", async (req, res) => {
     }
 })
 
+// Handle GET Request, For Getting Courses Types Name And Its Published Status
+router.get("/admin/coursestypes/names/status", async (req, res) => {
+    try {
+        const ShowCoursesTypes = await CoursesTypes.find({}).select('Course_Type Course_TypePublished');
+        res.status(200).send(ShowCoursesTypes);
+    } catch (e) {
+        res.status(400).send({ error: e.message })
+    }
+})
+
 // Handle GET Request, For Getting Courses Types
 router.get("/admin/coursestypes", async (req, res) => {
     try {

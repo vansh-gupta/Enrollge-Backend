@@ -24,7 +24,17 @@ router.get("/admin/universities", async (req, res) => {
     }
 })
 
-//   Handle Delete Request, For Deleting University Data
+// Handle GET Request, For Getting All Universities, Courses, Branches And Year Data
+router.get("/admin/universities/courses", async (req, res) => {
+    try {
+        const UniversitiesCourses = await University.find({}).select('University_Name University_Published University_Courses');
+        res.status(200).send(UniversitiesCourses);
+    } catch (e) {
+        res.status(402).json({ error: e.message });
+    }
+})
+
+// Handle Delete Request, For Deleting University Data
 router.delete('/admin/university/delete/:id', async (req, res) => {
     try {
         const _id = req.params.id

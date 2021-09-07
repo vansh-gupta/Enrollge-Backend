@@ -16,11 +16,22 @@ router.post("/admin/subjects/add", async (req, res) => {
     }
 })
 
-// Handle Get Request, For Gettings Subjects
-router.get("/admin/subjects", async (req, res) => {
+// // Handle Get Request, For Gettings Subjects
+// router.get("/admin/subjects", async (req, res) => {
+//     try {
+//         const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published');
+//         res.send(ShowAllSubjects);
+//     } catch (e) {
+//         res.status(400).send({ error: e.message });
+//     }
+// });
+
+// Handle Get Request, For Gettings Subjects according to the University
+router.get("/admin/subjects/:universityName", async (req, res) => {
     try {
-        const ShowAllSubjects = await Subjects.find({}).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published');
-        res.send(ShowAllSubjects);
+        const universityName = req.params.universityName
+        const ShowSubjectsByUniversity = await Subjects.find({ Subject_University: new RegExp(universityName, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published');
+        res.send(ShowSubjectsByUniversity);
     } catch (e) {
         res.status(400).send({ error: e.message });
     }
@@ -90,17 +101,6 @@ router.get("/admin/subjects/year/:subjectyear", async (req, res) => {
         const subjectyear = req.params.subjectyear
         const ShowByYearSubjects = await Subjects.find({ Subject_Year: new RegExp(subjectyear, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published');
         res.send(ShowByYearSubjects);
-    } catch (e) {
-        res.status(400).send({ error: e.message });
-    }
-});
-
-// Handle Get Request, For Searching Subjects By University
-router.get("/admin/subjects/university/:subjectuniversity", async (req, res) => {
-    try {
-        const subjectuniversity = req.params.subjectuniversity
-        const ShowByUniversitySubjects = await Subjects.find({ Subject_University: new RegExp(subjectuniversity, 'i') }).sort({ Subject_Order: 1 }).collation({ locale: "en_US", numericOrdering: true }).select('Subject_Name Subject_Order Subject_University Subject_Course Subject_Branch Subject_Year Subject_Published');
-        res.send(ShowByUniversitySubjects);
     } catch (e) {
         res.status(400).send({ error: e.message });
     }
@@ -231,7 +231,8 @@ router.patch("/admin/subjects/syllabus/update/:id", async (req, res) => {
                 const containerClient = await blobServiceClient.getContainerClient(containerName);
                 const blobName = `${Subject_University}-${Subject_Course}-${Subject_Branch.toString()}-${Subject_Year}-${Subject_Name}-${file.name}`
                 const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-                await blockBlobClient.upload(file.data, file.data.length);
+                const blobOptions = { blobHTTPHeaders: { blobContentType: file.mimetype } };
+                await blockBlobClient.upload(file.data, file.data.length, blobOptions);
                 // Updating Data in Database
                 if (blockBlobClient.url) {
                     await Subjects.findByIdAndUpdate({ _id: _id }, {

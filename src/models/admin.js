@@ -7,6 +7,10 @@ const AdminSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    user_role: {
+        type: String,
+        require: true
+    },
     password: {
         type: String,
         required: true
