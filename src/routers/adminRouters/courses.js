@@ -39,7 +39,7 @@ router.get("/admin/courses", async (req, res) => {
 router.get("/admin/courses/coursetype/:coursetype", async (req, res) => {
     try {
         const coursetype = req.params.coursetype
-        const ShowByCourseType = await Courses.find({ Courses_Type: new RegExp(coursetype, 'i') }).select('Course_Published Courses_Name Courses_Order Courses_Type Courses_ImgUrl Courses_Description').sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByCourseType = await Courses.find({ Courses_Type: coursetype }).select('Course_Published Courses_Name Courses_Order Courses_Type Courses_ImgUrl Courses_Description').sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
         res.send(ShowByCourseType);
     } catch (e) {
         res.send({ error: e.message });
@@ -50,7 +50,7 @@ router.get("/admin/courses/coursetype/:coursetype", async (req, res) => {
 router.get("/admin/courses/coursename/:coursename", async (req, res) => {
     try {
         const coursename = req.params.coursename
-        const ShowByCourseName = await Courses.find({ Courses_Name: new RegExp(coursename, 'i') }).select('Course_Published Courses_Name Courses_Order Courses_Type Courses_ImgUrl Courses_Description').sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
+        const ShowByCourseName = await Courses.find({ Courses_Name: coursename }).select('Course_Published Courses_Name Courses_Order Courses_Type Courses_ImgUrl Courses_Description').sort({ Courses_Order: 1 }).collation({ locale: "en_US", numericOrdering: true });
         res.send(ShowByCourseName);
     } catch (e) {
         res.send({ error: e.message });
